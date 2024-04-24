@@ -1,0 +1,98 @@
+.offcan-btn{
+    display: none;
+}
+
+.offcan-btn-content{
+    width: 45px;
+    height: 35px;
+    border: rgb(255, 235, 210, 50%) solid 2px;
+    border-radius: 5px;
+    color: rgba(255, 235, 210, 50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-flow: column;
+    overflow: hidden;
+    padding: auto;
+}
+
+.offcan-btn-content:hover{
+    border: rgba(255, 235, 210, 100%) solid 2px;
+    color: rgba(255, 235, 210, 100%);
+}
+
+.offcan-btn-content-child{
+    width: 60%;
+    height: 2px;
+    background-color: rgba(255, 235, 210, 50%);
+    border-radius: 8px;
+    transform-origin: left;
+    margin: 3px 0px;
+}
+
+.offcan-btn-content:hover .offcan-btn-content-child{
+    background-color: rgba(255, 235, 210, 100%);
+}
+
+.search-line{
+    display: flex;
+}
+
+.nav{
+    display: flex;
+}
+
+@media (max-width: 990px){
+    .nav{
+        display: none;
+    }
+
+    .offcan-btn{
+        display: block;
+    }
+
+    .search-line{
+        max-width: 200px;
+        min-width: 100px;
+    }
+}
+
+.nav-link{
+    color: rgba(255, 235, 210, 50%);
+}
+
+.nav-link:hover {
+    color: #ffebd2;
+    border-bottom: 2px solid #fc7643;
+}
+
+.nav-link:active {
+    color: #ffebd2;
+    border-bottom: 2px solid #fc7643;
+}
+
+@keyframes underline-appear {
+    from {
+        border-bottom: 0px;
+    }
+    to {
+        border-bottom: 2px solid #fc7643;
+    }
+}
+
+.tables-dropdown:hover{
+    color: #ffebd2;
+}
+
+.dropdown-item {
+    color: #ffebd2;
+}
+
+.dropdown-item:focus {
+    color: #ffebd2;
+}
+
+.dropdown-item:hover {
+    color: #ffebd2;
+    background-color: #fc7643;
+}
