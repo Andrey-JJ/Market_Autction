@@ -1,8 +1,8 @@
-package ru.projects.market_auction.models;
+package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.projects.market_auction.models.utils.AuthorsBooksId;
+import ru.project.market_auction.models.utils.AuthorsBooksId;
 
 @Entity
 @Table(name = "authorsbooks")

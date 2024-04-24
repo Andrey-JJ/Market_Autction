@@ -1,12 +1,12 @@
-package ru.projects.market_auction.models;
+package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table(name = "genres")
+@Table(name = "publishers")
 @Data
-public class Genre {
+public class Publisher {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

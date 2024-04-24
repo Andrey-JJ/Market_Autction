@@ -11,7 +11,7 @@
 	<groupId>ru.project</groupId>
 	<artifactId>market_autction</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>market_autction</name>
+	<name>market_auction</name>
 	<description>Book market with auction function</description>
 	<properties>
 		<java.version>17</java.version>

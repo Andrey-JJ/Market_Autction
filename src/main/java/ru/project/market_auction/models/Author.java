@@ -1,4 +1,4 @@
-package ru.projects.market_auction.models;
+package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
 import lombok.Data;

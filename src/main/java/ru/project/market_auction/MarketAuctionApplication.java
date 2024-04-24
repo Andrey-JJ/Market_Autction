@@ -1,4 +1,4 @@
-package ru.projects.market_auction;
+package ru.project.market_auction;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

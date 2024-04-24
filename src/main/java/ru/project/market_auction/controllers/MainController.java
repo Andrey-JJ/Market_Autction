@@ -1,4 +1,4 @@
-package ru.projects.market_auction.controllers;
+package ru.project.market_auction.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
