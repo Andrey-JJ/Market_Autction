@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="/css/style.css" type="text/css" rel="stylesheet">
+    <title>Список книг</title>
+</head>
+<body>
+    <!--Часть header-->
+    <th:block th:replace="main/header :: header"></th:block>
+    <!--Часть main-->
+    <main>
+        <div class="container mt-4">
+            <h2>Список книг</h2>
+            <a th:href="@{/books/new}" class="btn btn-success mb-3">Добавить новую книгу</a>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Авторы</th>
+                    <th>Жанр</th>
+                    <th>Издание</th>
+                    <!--<th>Год издания</th>-->
+                    <th>Кол-во страниц</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.title}"></td>
+                    <td>
+                        <ul>
+                            <li th:each="bookAuthor : ${book.authors}">
+                                <a th:href="@{/authors/details/{id}(id=${bookAuthor.author.id})}" th:text="${bookAuthor.author.toString()}"></a>
+                            </li>
+                        </ul>
+                    </td>
+                    <td th:text="${book.genre.name}"></td>
+                    <td>
+                        <ul>
+                            <li><a th:text="${book.publisher.name}"></a></li>
+                            <li><a th:text="${book.publicationYear}"></a></li>
+                        </ul>
+                    </td>
+                    <!--<td th:text="${book.publisher.name}"></td>
+                    <td th:text="${book.publicationYear}"></td>-->
+                    <td th:text="${book.pageCount}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <!--Скрипты для страницы-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

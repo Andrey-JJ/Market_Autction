@@ -1,13 +1,17 @@
 package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name = "books_sale")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class BookSale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

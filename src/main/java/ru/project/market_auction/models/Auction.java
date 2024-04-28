@@ -1,13 +1,17 @@
 package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Entity
 @Table(name = "auctions")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Auction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

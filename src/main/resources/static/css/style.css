@@ -96,3 +96,10 @@
     color: #ffebd2;
     background-color: #fc7643;
 }
+
+.scrollable-list {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 5px;
+}

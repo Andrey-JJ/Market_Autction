@@ -1,13 +1,17 @@
 package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "authors")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Author {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,5 +30,5 @@ public class Author {
     private String description;
 
     @OneToMany(mappedBy = "author")
-    private List<AuthorBook> authorBooks;
+    private List<AuthorBook> books;
 }

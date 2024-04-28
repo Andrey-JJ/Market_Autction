@@ -1,4 +1,4 @@
-package ru.project.market_auction.models.utils;
+package ru.project.market_auction.models;
 
 import java.io.Serializable;
 
