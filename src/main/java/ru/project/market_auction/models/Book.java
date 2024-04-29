@@ -5,13 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "Books")
+@Table(name = "books")
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,7 @@ public class Book {
     private Genre genre;
 
     @ManyToOne
-    @JoinColumn(name = "publisher_id")
+    @JoinColumn(name = "publisher_id", nullable = false)
     private Publisher publisher;
 
     @Column(name = "publication_year")
@@ -54,5 +54,9 @@ public class Book {
 
     public void setAuthors(List<AuthorBook> authors) {
         this.authors = authors;
+    }
+
+    public Book(){
+        this.authors = new ArrayList<AuthorBook>();
     }
 }

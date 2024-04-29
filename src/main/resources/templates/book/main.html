@@ -24,28 +24,32 @@
                     <th>Издание</th>
                     <!--<th>Год издания</th>-->
                     <th>Кол-во страниц</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="book : ${books}">
                     <td th:text="${book.title}"></td>
                     <td>
-                        <ul>
-                            <li th:each="bookAuthor : ${book.authors}">
-                                <a th:href="@{/authors/details/{id}(id=${bookAuthor.author.id})}" th:text="${bookAuthor.author.toString()}"></a>
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li th:each="authors : ${book.authors}">
+                                <a th:href="@{/authors/{id}(id=${authors.author.id})}" th:text="${authors.author.toString()}"></a>
                             </li>
                         </ul>
                     </td>
-                    <td th:text="${book.genre.name}"></td>
+                    <td th:if="${book.genre != null}" th:text="${book.genre.name}"></td>
                     <td>
-                        <ul>
-                            <li><a th:text="${book.publisher.name}"></a></li>
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li><a th:if="${book.publisher != null}" th:text="${book.publisher.name}"></a></li>
                             <li><a th:text="${book.publicationYear}"></a></li>
                         </ul>
                     </td>
-                    <!--<td th:text="${book.publisher.name}"></td>
-                    <td th:text="${book.publicationYear}"></td>-->
                     <td th:text="${book.pageCount}"></td>
+                    <td>
+                        <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-info btn-sm">Подробнее</a>
+                        <a th:href="@{/books/update/{id}(id=${book.id})}" class="btn btn-warning btn-sm">Изменить</a>
+                        <a th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Удалить</a>
+                    </td>
                 </tr>
                 </tbody>
             </table>

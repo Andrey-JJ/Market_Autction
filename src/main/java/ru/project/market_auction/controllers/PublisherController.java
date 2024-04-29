@@ -15,7 +15,7 @@ import java.util.Optional;
 public class PublisherController {
     @Autowired private PublisherRepository publisherRepository;
 
-    @GetMapping("/")
+    @GetMapping("/main")
     public String getPublishers(Model model){
         List<Publisher> publishers = (List<Publisher>) publisherRepository.findAll();
         model.addAttribute("publishers", publishers);
@@ -26,7 +26,7 @@ public class PublisherController {
     public String getPublisherDetails(Model model, @PathVariable("id") Long id){
         Optional<Publisher> publisher = publisherRepository.findById(id);
         if(publisher.isEmpty()){
-            return "redirect:/publishers/";
+            return "redirect:/publishers/main";
         }
         model.addAttribute("publisher", publisher.get());
         return "publisher/detail";
@@ -41,7 +41,7 @@ public class PublisherController {
     @PostMapping("/new")
     public String addPublisher(@ModelAttribute Publisher publisher, Model model){
         publisherRepository.save(publisher);
-        return "redirect:/publishers/";
+        return "redirect:/publishers/main";
     }
 
     @GetMapping("/update/{id}")
@@ -56,14 +56,14 @@ public class PublisherController {
     @PostMapping("/update")
     public String editPublisher(@ModelAttribute Publisher publisher, Model model){
         publisherRepository.save(publisher);
-        return "redirect:/publishers/";
+        return "redirect:/publishers/main";
     }
 
     @GetMapping("/delete/{id}")
     public String delPublisher(Model model, @PathVariable("id") Long id){
         Optional<Publisher> publisher = publisherRepository.findById(id);
         if (publisher.isEmpty())
-            return "redirect:/publishers/";
+            return "redirect:/publishers/main";
         model.addAttribute("publisher", publisher.get());
         return "publisher/del";
     }
@@ -73,6 +73,6 @@ public class PublisherController {
         Optional<Publisher> publisher = publisherRepository.findById(id);
         if (publisher.isPresent())
             publisherRepository.deleteById(id);
-        return "redirect:/publishers/";
+        return "redirect:/publishers/main";
     }
 }

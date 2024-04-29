@@ -1,13 +1,12 @@
 package ru.project.market_auction.models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "authorsbooks")
-@IdClass(AuthorsBooksId.class)
+@IdClass(AuthorBookId.class)
 @Data
 @NoArgsConstructor
 public class AuthorBook {

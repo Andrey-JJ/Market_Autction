@@ -15,7 +15,7 @@ import java.util.Optional;
 public class GenreController {
     @Autowired GenreRepository genreRepository;
 
-    @GetMapping("/")
+    @GetMapping("/main")
     public String getAllGenres(Model model){
         List<Genre> genres = (List<Genre>) genreRepository.findAll();
         model.addAttribute("genres", genres);
@@ -26,7 +26,7 @@ public class GenreController {
     public String getGenre(Model model, @PathVariable("id") Long id){
         Optional<Genre> genre = genreRepository.findById(id);
         if(genre.isEmpty()){
-            return "redirect:/genres/";
+            return "redirect:/genres/main";
         }
         model.addAttribute("genre", genre.get());
         return "genre/detail";
@@ -41,14 +41,14 @@ public class GenreController {
     @PostMapping("/new")
     public String addGenre(@ModelAttribute Genre genre, Model model){
         genreRepository.save(genre);
-        return "redirect:/genres/";
+        return "redirect:/genres/main";
     }
 
     @GetMapping("/update/{id}")
     public String editGenre(Model model, @PathVariable("id") Long id){
         Optional<Genre> genre = genreRepository.findById(id);
         if(genre.isEmpty()){
-            return "redirect:/genres/";
+            return "redirect:/genres/main";
         }
         model.addAttribute("genre", genre.get());
         return "genre/edit";
@@ -57,14 +57,14 @@ public class GenreController {
     @PostMapping("/update")
     public String editGenre(Model model, @ModelAttribute Genre genre){
         genreRepository.save(genre);
-        return "redirect:/genres/";
+        return "redirect:/genres/main";
     }
 
     @GetMapping("/delete/{id}")
     public String delGenre(Model model, @PathVariable("id") Long id){
         Optional<Genre> genre = genreRepository.findById(id);
         if(genre.isEmpty()){
-            return "redirect:/genres/";
+            return "redirect:/genres/main";
         }
         model.addAttribute("genre", genre.get());
         return "genre/del";
@@ -76,6 +76,6 @@ public class GenreController {
         if(genre.isPresent()){
             genreRepository.delete(genre.get());
         }
-        return "redirect:/genres/";
+        return "redirect:/genres/main";
     }
 }

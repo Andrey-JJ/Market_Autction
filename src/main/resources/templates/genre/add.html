@@ -13,14 +13,14 @@
     <!--Часть main-->
     <main>
         <div class="container mt-4">
-            <h2 class="mt-5">Добавление жанра</h2>
-            <form action="#" th:action="@{/genres/new}" method="post" th:object="${genre}">
+            <h2 class="mt-5 mb-3">Добавление жанра</h2>
+            <form th:action="@{/genres/new}" method="post" th:object="${genre}">
                 <div class="mb-3">
                     <label for="name" class="form-label">Название:</label>
                     <input type="text" id="name" name="name" class="form-control" th:field="*{name}" required />
                 </div>
                 <button type="submit" class="btn btn-primary">Добавить</button>
-                <a href="/genres/" class="btn btn-secondary">Отменить</a>
+                <a href="/genres/main" class="btn btn-secondary">Отменить</a>
             </form>
         </div>
     </main>

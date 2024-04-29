@@ -12,7 +12,7 @@
     <th:block th:replace="main/header :: header"></th:block>
     <!--Часть main-->
     <main class="container mt-4">
-        <form action="#" th:action="@{/books/update/{id}(id=${selectedBook.id})}" method="post" th:object="${selectedBook}" enctype="multipart/form-data">
+        <form action="#" th:action="@{/books/update/{id}(id=${book.id})}" method="post" th:object="${book}" enctype="multipart/form-data">
             <h2 class="mt-5 mb-3">Изменение книги</h2>
             <div class="mb-3">
                 <label for="title" class="form-label">Название:</label>
@@ -21,14 +21,14 @@
             <div class="form-group row mb-3">
                 <div class="col-md-6 mb-3">
                     <label for="publisher">Издатель:</label>
-                    <input type="text" id="publisher" name="publisher" class="form-control" placeholder="Введите издательство" list="publishers">
+                    <input type="text" id="publisher" name="publisher" value="${book.publisher.name}" class="form-control" placeholder="Введите издательство" list="publishers">
                     <datalist id="publishers">
-                        <option th:each="publisher : ${publishers}" th:value="${publisher.name}" th:text="${publisher.name}"></option>
+                        <option th:each="publisher : ${publishers}" th:value="${publisher.id}" th:text="${publisher.name}"></option>
                     </datalist>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label for="publicationYear">Год публикации:</label>
-                    <input type="number" class="form-control" id="publicationYear" name="publicationYear" th:value="${selectedBook.publication_year}" required>
+                    <input type="number" class="form-control" id="publicationYear" name="publicationYear" th:value="${book.publication_year}" required>
                 </div>
             </div>
             <div class="form-group mb-3">
@@ -44,14 +44,14 @@
             </div>
             <div class="form-group mb-3">
                 <label for="genre">Категория:</label>
-                <input type="text" id="genre" name="genre" class="form-control" list="genres" placeholder="Введите жанр">
+                <input type="text" id="genre" name="genre" value="${book.genre.name}" class="form-control" list="genres" placeholder="Введите жанр">
                 <datalist id="genres">
-                    <option th:each="genre : ${genres}" th:value="${genre.name}" th:text="${genre.name}"></option>
+                    <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
                 </datalist>
             </div>
             <div class="form-group mb-3">
                 <label for="volume">Объем:</label>
-                <input type="number" class="form-control" id="volume" name="volume" th:value="${selectedBook.volume}" required>
+                <input type="number" class="form-control" id="volume" name="volume" th:value="${book.volume}" required>
             </div>
             <div class="form-group mb-3">
                 <label for="imageFile">Изображение:</label>

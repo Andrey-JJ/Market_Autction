@@ -5,21 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Entity
-@Table(name = "genres")
+@Table(name = "roles")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Genre {
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
-
-    @OneToMany(mappedBy = "genre")
-    private List<Book> books;
 }

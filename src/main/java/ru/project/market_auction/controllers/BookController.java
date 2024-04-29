@@ -25,7 +25,7 @@ public class BookController {
     @Autowired GenreRepository genreRepository;
     @Autowired AuthorBookRepository authorBookRepository;
 
-    @GetMapping("/")
+    @GetMapping("/main")
     public String getAllBooks(Model model){
         List<Book> books = (List<Book>) bookRepository.findAll();
         model.addAttribute("books", books);
@@ -36,7 +36,7 @@ public class BookController {
     public String getBook(Model model, @PathVariable("id") Long id){
         Optional<Book> book = bookRepository.findById(id);
         if(book.isEmpty()){
-            return "redirect:/books/";
+            return "redirect:/books/main";
         }
         model.addAttribute("book", book.get());
         return "book/detail";
@@ -65,7 +65,7 @@ public class BookController {
             try {
                 // Сохранение файла на сервере, например, в папку resources\static\images
                 String imagePath = imageFile.getOriginalFilename();
-                Path uploadPath = Paths.get("src/main/resources/static/images/");
+                Path uploadPath = Paths.get("src/main/resources/static/images/books");
                 Files.copy(imageFile.getInputStream(), uploadPath.resolve(imageFile.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
                 // Установка пути изображения в модель книги
                 book.setImage(imagePath);
@@ -86,6 +86,6 @@ public class BookController {
             authorBookRepository.saveAll(book.getAuthors());
         }
 
-        return "redirect:/books/";
+        return "redirect:/books/main";
     }
 }

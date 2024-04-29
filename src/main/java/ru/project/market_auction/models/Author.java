@@ -20,7 +20,7 @@ public class Author {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "middle_name")
@@ -31,4 +31,9 @@ public class Author {
 
     @OneToMany(mappedBy = "author")
     private List<AuthorBook> books;
+
+    @Override
+    public String toString() {
+        return lastName + " " + firstName + " " + middleName;
+    }
 }
