@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "user_role")
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @IdClass(UserRoleId.class)
 public class UserRole {
@@ -21,4 +20,9 @@ public class UserRole {
     @ManyToOne
     @JoinColumn(name = "role_id")
     private Role role;
+
+    public UserRole(User user, Role role){
+        this.user = user;
+        this.role = role;
+    }
 }

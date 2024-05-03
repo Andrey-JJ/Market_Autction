@@ -21,8 +21,7 @@
             <li><a class="dropdown-item" href="/publishers/main">Издатели</a></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="/users/main">Пользователи</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href="/sellers/main">Продавцы</a></li>
+            <li><a class="dropdown-item" href="/roles/main">Роли</a></li>
           </ul>
         </li>
       </ul>
@@ -39,22 +38,23 @@
           <span class="dropdown-toggle ms-2" style="color: rgb(255, 235, 210);">Администратор</span>
         </a>
         <ul class="dropdown-menu" style="background-color: #273248;">
-          <li><a class="dropdown-item" href="/user/">Профиль</a></li>
-          <li><a class="dropdown-item" href="#">Настройки</a></li>
+          <li><a class="dropdown-item" href="/users/">Профиль</a></li>
+          <!--<li><a class="dropdown-item" href="#">Настройки</a></li>-->
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="#">Выход</a></li>
         </ul>
       </div>
-      <!--<div class="text-end">
+      <div class="text-end">
       <button type="button" class="btn btn-outline-light me-2">Вход</button>
-      <button type="button" class="btn btn-warning">Регистрация</button>
-      </div>-->
+      <button type="button" href="/registration" class="btn btn-warning">Регистрация</button>
+      </div>
+
       <button class="navbar-toggler offcan-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarDark" aria-controls="offcanvasNavbarDark" aria-label="Toggle navigation">
-                      <span class="offcan-btn-content">
-                          <span class="offcan-btn-content-child"></span>
-                          <span class="offcan-btn-content-child"></span>
-                          <span class="offcan-btn-content-child"></span>
-                      </span>
+        <span class="offcan-btn-content">
+            <span class="offcan-btn-content-child"></span>
+            <span class="offcan-btn-content-child"></span>
+            <span class="offcan-btn-content-child"></span>
+        </span>
       </button>
       <div class="offcanvas offcanvas-end" style="background-color: #273248;" tabindex="-1" id="offcanvasNavbarDark" aria-labelledby="offcanvasNavbarDarkLabel">
         <div class="offcanvas-header">
@@ -76,8 +76,7 @@
                 <li><a class="dropdown-item" href="/publishers/main">Издатели</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/users/main">Пользователи</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/sellers/main">Продавцы</a></li>
+                <li><a class="dropdown-item" href="/roles/main">Роли</a></li>
               </ul>
             </li>
             <!-- Иконка пользователя -->
@@ -87,6 +86,10 @@
                 <span class="ms-2">Администратор</span>
               </a>
             </li>
+            <div class="text-end">
+              <button type="button" class="btn btn-outline-light me-2">Вход</button>
+              <button type="button" class="btn btn-warning">Регистрация</button>
+            </div>
           </ul>
         </div>
       </div>

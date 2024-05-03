@@ -18,17 +18,23 @@
             <table class="table">
                 <thead>
                 <tr>
+                    <th></th>
                     <th>Название</th>
                     <th>Авторы</th>
                     <th>Жанр</th>
                     <th>Издание</th>
                     <!--<th>Год издания</th>-->
-                    <th>Кол-во страниц</th>
+                    <th>Cтраниц</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="book : ${books}">
+                    <td>
+                        <div class="card mb-4 border-0">
+                            <img th:src="@{/images/books/{imagePath}(imagePath=${book.image})}" class="card-img-top mx-auto" style="width: 190px; height: 300px; object-fit: cover;" alt="Book Cover">
+                        </div>
+                    </td>
                     <td th:text="${book.title}"></td>
                     <td>
                         <ul style="list-style-type: none; padding-left: 0;">
@@ -39,16 +45,15 @@
                     </td>
                     <td th:if="${book.genre != null}" th:text="${book.genre.name}"></td>
                     <td>
-                        <ul style="list-style-type: none; padding-left: 0;">
-                            <li><a th:if="${book.publisher != null}" th:text="${book.publisher.name}"></a></li>
-                            <li><a th:text="${book.publicationYear}"></a></li>
-                        </ul>
+                        <a th:if="${book.publisher != null}" th:text="${book.publisher.name + ' ' + book.publicationYear}"></a>
                     </td>
                     <td th:text="${book.pageCount}"></td>
                     <td>
-                        <a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-info btn-sm">Подробнее</a>
-                        <a th:href="@{/books/update/{id}(id=${book.id})}" class="btn btn-warning btn-sm">Изменить</a>
-                        <a th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm">Удалить</a>
+                        <ul style="list-style-type: none; padding-left: 0;">
+                            <li class="mb-3"><a th:href="@{/books/{id}(id=${book.id})}" class="btn btn-info btn-sm text-white" style="width: 150px; height: 30px;">Подробнее</a></li>
+                            <li class="mb-3"><a th:href="@{/books/update/{id}(id=${book.id})}" class="btn btn-warning btn-sm text-white" style="width: 150px; height: 30px;">Изменить</a></li>
+                            <li class="mb-3"><a th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-danger btn-sm" style="width: 150px; height: 30px;">Удалить</a></li>
+                        </ul>
                     </td>
                 </tr>
                 </tbody>

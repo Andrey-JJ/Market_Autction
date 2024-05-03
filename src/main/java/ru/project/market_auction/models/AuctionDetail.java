@@ -27,10 +27,4 @@ public class AuctionDetail {
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
-
-    @Column(name = "minimum_price")
-    private BigDecimal minimumPrice;
-
-    @Column(name = "current_price")
-    private BigDecimal currentPrice;
 }
