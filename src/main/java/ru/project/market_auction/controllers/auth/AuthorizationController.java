@@ -7,6 +7,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.project.market_auction.models.Role;
 import ru.project.market_auction.models.User;
 import ru.project.market_auction.models.UserRole;
@@ -17,15 +18,11 @@ import ru.project.market_auction.repositories.UserRoleRepository;
 import java.util.Optional;
 
 @Controller
-public class RegistrationController {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    UserRoleRepository userRoleRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+public class AuthorizationController {
+    @Autowired private UserRepository userRepository;
+    @Autowired private RoleRepository roleRepository;
+    @Autowired private UserRoleRepository userRoleRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @GetMapping("/registration")
     public String showRegistrationForm(Model model){
@@ -34,18 +31,32 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String showRegistrationForm(Model model, @ModelAttribute User user){
+    public String processRegistrationForm(Model model, @ModelAttribute User user){
         if(userRepository.findByLogin(user.getLogin()) != null) {
             return "redirect:/registration";
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Optional<Role> role = roleRepository.findByName("USER");
-        if(role.isEmpty()) {
+        if(!role.isEmpty()) {
             UserRole userRole = new UserRole(user, role.get());
             user.getRoles().add(userRole);
-            userRoleRepository.save(userRole);
+            userRepository.save(user);
+            userRoleRepository.saveAll(user.getRoles());
         }
-        userRepository.save(user);
         return "redirect:/market/main";
+    }
+
+    @GetMapping("/login")
+    public String showLoginForm(Model model){
+        return "auth/login";
+    }
+
+    @PostMapping("/login")
+    public String showLoginForm(Model model, @RequestParam String loginOrEmail, @RequestParam String password){
+        User user = userRepository.findByLogin(loginOrEmail);
+        if(user == null){
+            return "redirect:/login";
+        }
+        return "redirect:/";
     }
 }

@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequestMapping("/roles")
 @Controller
 public class RoleController {
-    @Autowired RoleRepository roleRepository;
+    @Autowired private RoleRepository roleRepository;
 
     @GetMapping("/main")
     public String getAllRoles(Model model){

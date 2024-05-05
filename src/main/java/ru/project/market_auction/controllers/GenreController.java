@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequestMapping("/genres")
 @Controller
 public class GenreController {
-    @Autowired GenreRepository genreRepository;
+    @Autowired private GenreRepository genreRepository;
 
     @GetMapping("/main")
     public String getAllGenres(Model model){
@@ -41,7 +41,7 @@ public class GenreController {
     @PostMapping("/new")
     public String addGenre(@ModelAttribute Genre genre, Model model){
         genreRepository.save(genre);
-        return "redirect:/genres/main";
+        return "redirect:/genres/" + genre.getId();
     }
 
     @GetMapping("/update/{id}")
@@ -57,7 +57,7 @@ public class GenreController {
     @PostMapping("/update")
     public String editGenre(Model model, @ModelAttribute Genre genre){
         genreRepository.save(genre);
-        return "redirect:/genres/main";
+        return "redirect:/genres/" + genre.getId();
     }
 
     @GetMapping("/delete/{id}")

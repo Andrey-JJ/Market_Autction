@@ -38,6 +38,14 @@ public class Auction {
     @OneToMany(mappedBy = "auction")
     private List<AuctionDetail> auctionDetails;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public Auction(){
         this.auctionDetails = new ArrayList<>();
     }

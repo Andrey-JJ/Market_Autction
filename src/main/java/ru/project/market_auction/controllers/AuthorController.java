@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequestMapping("/authors")
 @Controller
 public class AuthorController {
-    @Autowired AuthorRepository authorRepository;
+    @Autowired private AuthorRepository authorRepository;
 
     @GetMapping("/main")
     public String getAllAuthors(Model model){

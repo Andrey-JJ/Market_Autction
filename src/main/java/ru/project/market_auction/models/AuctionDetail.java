@@ -27,4 +27,12 @@ public class AuctionDetail {
     @ManyToOne
     @JoinColumn(name = "book_id")
     private Book book;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

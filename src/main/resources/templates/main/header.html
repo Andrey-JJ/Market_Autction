@@ -32,21 +32,21 @@
       </form>
 
       <!-- Пользователь -->
-      <div class="dropdown text-end">
+      <div sec:authorize="isAuthenticated()" class="dropdown text-end">
         <a class="d-fles align-items-center link-body-emphasis text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="/images/logos/user-icon.png" alt="mdo" width="32" height="32" class="rounded-circle" style="max-height: 32px;">
-          <span class="dropdown-toggle ms-2" style="color: rgb(255, 235, 210);">Администратор</span>
+          <span class="dropdown-toggle ms-2" style="color: rgb(255, 235, 210);"></span>
         </a>
         <ul class="dropdown-menu" style="background-color: #273248;">
           <li><a class="dropdown-item" href="/users/">Профиль</a></li>
-          <!--<li><a class="dropdown-item" href="#">Настройки</a></li>-->
           <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="#">Выход</a></li>
         </ul>
       </div>
-      <div class="text-end">
-      <button type="button" class="btn btn-outline-light me-2">Вход</button>
-      <button type="button" href="/registration" class="btn btn-warning">Регистрация</button>
+      <!-- Кнопки для пользователя -->
+      <div sec:authorize="isAnonymous()" class="text-end">
+        <a type="button" th:href="@{/login}" class="btn btn-outline-light me-2">Вход</a>
+        <a type="button" th:href="@{/registration}" class="btn btn-warning">Регистрация</a>
       </div>
 
       <button class="navbar-toggler offcan-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarDark" aria-controls="offcanvasNavbarDark" aria-label="Toggle navigation">
@@ -80,15 +80,15 @@
               </ul>
             </li>
             <!-- Иконка пользователя -->
-            <li class="nav-item mb-2">
+            <li sec:authorize="isAuthenticated()" class="nav-item mb-2">
               <a class="d-block link-body-emphasis text-decoration-none">
                 <img src="/images/logos/user-icon.png" alt="mdo" width="32" height="32" class="rounded-circle" style="max-height: 32px;">
                 <span class="ms-2">Администратор</span>
               </a>
             </li>
-            <div class="text-end">
-              <button type="button" class="btn btn-outline-light me-2">Вход</button>
-              <button type="button" class="btn btn-warning">Регистрация</button>
+            <div sec:authorize="isAnonymous()" class="text-end ml-5">
+              <button th:href="@{/login}" type="button" class="btn btn-outline-light me-2">Вход</button>
+              <button th:href="@{/registration}" type="button" class="btn btn-warning">Регистрация</button>
             </div>
           </ul>
         </div>

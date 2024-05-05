@@ -1,6 +1,7 @@
 package ru.project.market_auction;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -14,7 +15,7 @@ import ru.project.market_auction.services.auth.AuthUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig {
     @Autowired
     private AuthUserDetailsService authUserDetailsService;
@@ -26,14 +27,16 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(authorizeRequests ->
-                        authorizeRequests
-                                .requestMatchers("/registration", "/").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .formLogin(login -> login.loginPage("/login").defaultSuccessUrl("/").permitAll())
-                .logout(logout -> logout.permitAll());
+        http.authorizeHttpRequests(authorizeRequests ->
+                    authorizeRequests
+                            .requestMatchers("/registration", "/login", "/").permitAll()
+                            .requestMatchers("/market/**", "/auction/**").permitAll()
+                            //Для реурсов из папки static
+                            .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+                            .anyRequest().permitAll())
+            .formLogin(login ->
+                    login.loginPage("/login").permitAll())
+            .logout(logout -> logout.permitAll());
         return http.build();
     }
 }

@@ -19,11 +19,11 @@ import java.util.Optional;
 @RequestMapping("/books")
 @Controller
 public class BookController {
-    @Autowired BookRepository bookRepository;
-    @Autowired AuthorRepository authorRepository;
-    @Autowired PublisherRepository publisherRepository;
-    @Autowired GenreRepository genreRepository;
-    @Autowired AuthorBookRepository authorBookRepository;
+    @Autowired private BookRepository bookRepository;
+    @Autowired private AuthorRepository authorRepository;
+    @Autowired private PublisherRepository publisherRepository;
+    @Autowired private GenreRepository genreRepository;
+    @Autowired private AuthorBookRepository authorBookRepository;
 
     @GetMapping("/main")
     public String getAllBooks(Model model){
@@ -56,6 +56,8 @@ public class BookController {
 
     @PostMapping("/new")
     public String addBook(@ModelAttribute Book book,
+                          @RequestParam("selectedPublisher") String publisher,
+                          @RequestParam("selectedGenre") String genre,
                           @RequestParam("imageFile") MultipartFile imageFile,
                           @RequestParam("selectedAuthors") List<Long> selectedAuthors,
                           Model model){
@@ -73,6 +75,10 @@ public class BookController {
                 e.printStackTrace(); // Обработка ошибок ввода-вывода
             }
         }
+
+        book.setPublisher(publisherRepository.findByName(publisher));
+        book.setGenre(genreRepository.findByName(genre));
+
         //Обработка авторов книги
         if(selectedAuthors != null){
             //Поиск авторов
@@ -86,6 +92,88 @@ public class BookController {
             authorBookRepository.saveAll(book.getAuthors());
         }
 
+        return "redirect:/books/main";
+    }
+
+    @GetMapping("/update/{id}")
+    public String updateBook(@PathVariable("id") Long id, Model model){
+        Optional<Book> book = bookRepository.findById(id);
+
+        if (book.isEmpty()) {
+            return "redirect:/books/main";
+        }
+
+        // Получение необходимых данных для выпадающих списков
+        List<Author> authors = (List<Author>) authorRepository.findAll();
+        List<Genre> genres = (List<Genre>) genreRepository.findAll();
+        List<Publisher> publishers = (List<Publisher>) publisherRepository.findAll();
+
+        model.addAttribute("book", book.get());
+        model.addAttribute("genres", genres);
+        model.addAttribute("allAuthors", authors);
+        model.addAttribute("publishers", publishers);
+
+        return "book/edit";
+    }
+
+    @PostMapping("/update")
+    public String editBook(@ModelAttribute Book book,
+                           @RequestParam("selectedPublisher") String publisher,
+                           @RequestParam("selectedGenre") String genre,
+                           @RequestParam("imageFile") MultipartFile imageFile,
+                           @RequestParam(name = "selectedAuthors") List<Long> authorIds,
+                           Model model) {
+        // Обработка файла изображения
+        if (!imageFile.isEmpty()) {
+            try {
+                // Сохранение файла на сервере, например, в папку resources\static\images
+                String imagePath = imageFile.getOriginalFilename();
+                Path uploadPath = Paths.get("src/main/resources/static/images/");
+                Files.copy(imageFile.getInputStream(), uploadPath.resolve(imageFile.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+
+                // Установка пути изображения в модель книги
+                book.setImage(imagePath);
+            } catch (IOException e) {
+                e.printStackTrace(); // Обработка ошибок ввода-вывода
+            }
+        }
+
+        if (authorIds != null) {
+            List<Author> authors = (List<Author>) authorRepository.findAllById(authorIds);
+            // Удаление существующих связей с авторами
+
+            // Добавление новых связей в дополнительную таблицу bookauthor
+            for (var author : authors) {
+                book.getAuthors().add(new AuthorBook(book, author));
+            }
+        }
+
+        book.setPublisher(publisherRepository.findByName(publisher));
+        book.setGenre(genreRepository.findByName(genre));
+
+        // Обновление книги
+        bookRepository.save(book);
+        authorBookRepository.saveAll(book.getAuthors());
+
+        return "redirect:/books/details/" + book.getId(); // Перенаправление на страницу деталей книги
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delBook(Model model, @PathVariable("id") Long id){
+        Optional<Book> book = bookRepository.findById(id);
+        if(book.isEmpty()){
+            return "redirect:/books/main";
+        }
+        model.addAttribute("book", book.get());
+        return "book/del";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delBook(@PathVariable("id") Long id){
+        Optional<Book> book = bookRepository.findById(id);
+        if(book.isPresent()){
+            bookRepository.deleteById(id);
+        }
         return "redirect:/books/main";
     }
 }

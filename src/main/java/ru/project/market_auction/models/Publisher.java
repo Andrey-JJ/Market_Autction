@@ -22,4 +22,12 @@ public class Publisher {
 
     @OneToMany(mappedBy = "publisher")
     private List<Book> books;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

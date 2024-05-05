@@ -40,6 +40,14 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<AuthorBook> authors;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getImage() {
         return image;
     }
@@ -54,6 +62,22 @@ public class Book {
 
     public void setAuthors(List<AuthorBook> authors) {
         this.authors = authors;
+    }
+
+    public Genre getGenre() {
+        return genre;
+    }
+
+    public void setGenre(Genre genre) {
+        this.genre = genre;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(Publisher publisher) {
+        this.publisher = publisher;
     }
 
     public Book(){

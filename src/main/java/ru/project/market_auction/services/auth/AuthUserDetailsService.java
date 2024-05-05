@@ -21,11 +21,11 @@ public class AuthUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> user = userRepository.findByLogin(username);
-        if (user.isEmpty()) {
+        User user = userRepository.findByLogin(username);
+        if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
-        return new org.springframework.security.core.userdetails.User(user.get().getLogin(), user.get().getPassword(), getAuthorities(user.get()));
+        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), getAuthorities(user));
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {

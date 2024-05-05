@@ -22,22 +22,16 @@
                         <table class="table">
                             <thead>
                             <tr>
-                                <th>ID</th>
                                 <th>ФИО</th>
                                 <th>Логин</th>
                                 <th>Email</th>
-                                <th></th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="users : ${role.users}">
-                                <td th:text="${users.user.id}"></td>
                                 <td th:text="${users.user.toString()}"></td>
                                 <td th:text="${users.user.login}"></td>
                                 <td th:text="${users.user.email}"></td>
-                                <td>
-                                    <a th:href="@{/users/{id}(id=${user.id})}" class="btn btn-primary">Подробнее о пользователе</a>
-                                </td>
                             </tr>
                             </tbody>
                         </table>
