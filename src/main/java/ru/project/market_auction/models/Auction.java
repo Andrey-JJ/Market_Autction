@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class Auction {
     private String auctionType;
 
     @Column(name = "auction_duration")
-    private LocalTime auctionDuration;
+    private LocalDateTime auctionDuration;
 
     @Column(name = "minimum_price")
     private BigDecimal minimumPrice;
@@ -38,6 +39,9 @@ public class Auction {
     @OneToMany(mappedBy = "auction")
     private List<AuctionDetail> auctionDetails;
 
+    @OneToMany(mappedBy = "auction")
+    private List<AuctionBid> auctionBids;
+
     public Long getId() {
         return id;
     }
@@ -46,7 +50,64 @@ public class Auction {
         this.id = id;
     }
 
+    public List<AuctionDetail> getAuctionDetails() {
+        return auctionDetails;
+    }
+
+    public void setAuctionDetails(List<AuctionDetail> auctionDetails) {
+        this.auctionDetails = auctionDetails;
+    }
+
+    public List<AuctionBid> getAuctionBids() {
+        return auctionBids;
+    }
+
+    public void setAuctionBids(List<AuctionBid> auctionBids) {
+        this.auctionBids = auctionBids;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public String getAuctionType() {
+        return auctionType;
+    }
+
+    public void setAuctionType(String auctionType) {
+        this.auctionType = auctionType;
+    }
+
+    public LocalDateTime getAuctionDuration() {
+        return auctionDuration;
+    }
+
+    public void setAuctionDuration(LocalDateTime auctionDuration) {
+        this.auctionDuration = auctionDuration;
+    }
+
+    public BigDecimal getMinimumPrice() {
+        return minimumPrice;
+    }
+
+    public void setMinimumPrice(BigDecimal minimumPrice) {
+        this.minimumPrice = minimumPrice;
+    }
+
+    public BigDecimal getCurrentPrice() {
+        return currentPrice;
+    }
+
+    public void setCurrentPrice(BigDecimal currentPrice) {
+        this.currentPrice = currentPrice;
+    }
+
     public Auction(){
         this.auctionDetails = new ArrayList<>();
+        this.auctionBids = new ArrayList<>();
     }
 }

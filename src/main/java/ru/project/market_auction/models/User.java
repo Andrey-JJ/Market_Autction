@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class User {
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -27,20 +28,21 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
     @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "user")
-    private List<UserRole> roles;
+    @ManyToOne
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     @OneToMany(mappedBy = "user")
     private List<BookSale> bookSales;
@@ -48,18 +50,21 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Auction> auctions;
 
+    @OneToMany(mappedBy = "user")
+    private List<AuctionBid> auctionBids;
+
     public User(){
-        this.roles = new ArrayList<>();
         this.bookSales = new ArrayList<>();
         this.auctions = new ArrayList<>();
+        this.auctionBids = new ArrayList<>();
     }
 
-    public List<UserRole> getRoles() {
-        return roles;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoles(List<UserRole> roles) {
-        this.roles = roles;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public List<BookSale> getBookSales() {
@@ -76,6 +81,14 @@ public class User {
 
     public void setAuctions(List<Auction> auctions) {
         this.auctions = auctions;
+    }
+
+    public List<AuctionBid> getAuctionBids() {
+        return auctionBids;
+    }
+
+    public void setAuctionBids(List<AuctionBid> auctionBids) {
+        this.auctionBids = auctionBids;
     }
 
     public String getLogin() {

@@ -37,7 +37,9 @@ public class UserController {
 
     @GetMapping("/new")
     public String addUser(Model model){
+        List<Role> roles = (List<Role>) roleRepository.findAll();
         model.addAttribute("user", new User());
+        model.addAttribute("roles", roles);
         return "user/add";
     }
 

@@ -17,6 +17,14 @@
             <form action="#" th:action="@{/users/update}" method="post" th:object="${user}">
                 <input type="hidden" th:field="*{id}"/>
                 <div class="mb-3">
+                    <label for="login" class="form-label">Логин:</label>
+                    <input type="text" id="login" name="login" class="form-control" th:field="*{login}" required/>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль:</label>
+                    <input type="text" id="password" name="password" class="form-control" th:field="*{password}" required/>
+                </div>
+                <div class="mb-3">
                     <label for="lastName" class="form-label">Фамилия:</label>
                     <input type="text" id="lastName" name="lastName" class="form-control" th:field="*{lastName}" required/>
                 </div>
@@ -29,8 +37,10 @@
                     <input type="text" id="middleName" name="middleName" class="form-control" th:field="*{middleName}"/>
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Описание:</label>
-                    <textarea id="description" name="description" class="form-control" th:field="*{description}"></textarea>
+                    <label for="role" class="form-label">Роль:</label>
+                    <select id="role" name="role" class="form-select" th:field="*{role.id}">
+                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}" th:selected="${role.id == user.role.id}"></option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Сохранить</button>
                 <a href="/users/main" class="btn btn-secondary">Отменить</a>

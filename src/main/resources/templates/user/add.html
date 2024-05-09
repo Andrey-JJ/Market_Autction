@@ -16,6 +16,14 @@
             <h2 class="mb-3 mt-4">Добавление пользователя</h2>
             <form action="#" th:action="@{/users/new}" method="post" th:object="${user}">
                 <div class="mb-3">
+                    <label for="login" class="form-label">Логин:</label>
+                    <input type="text" id="login" name="login" class="form-control" th:field="*{login}" required/>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Пароль:</label>
+                    <input type="text" id="password" name="password" class="form-control" th:field="*{password}" required/>
+                </div>
+                <div class="mb-3">
                     <label for="lastName" class="form-label">Фамилия:</label>
                     <input type="text" id="lastName" name="lastName" class="form-control" th:field="*{lastName}" required/>
                 </div>
@@ -26,6 +34,12 @@
                 <div class="mb-3">
                     <label for="middleName" class="form-label">Отчество:</label>
                     <input type="text" id="middleName" name="middleName" class="form-control" th:field="*{middleName}"/>
+                </div>
+                <div class="mb-3">
+                    <label for="role" class="form-label">Роль:</label>
+                    <select id="role" name="role" class="form-select" th:field="*{role}">
+                        <option th:each="role : ${roles}" th:value="${role.id}" th:text="${role.name}"></option>
+                    </select>
                 </div>
                 <button type="submit" class="btn btn-primary">Добавить</button>
                 <a href="/users/main" class="btn btn-secondary">Отменить</a>

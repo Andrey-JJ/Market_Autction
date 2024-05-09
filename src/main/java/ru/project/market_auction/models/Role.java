@@ -14,6 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Role {
     @Id
+    @Column(name = "id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -21,17 +22,17 @@ public class Role {
     private String name;
 
     @OneToMany(mappedBy = "role")
-    private List<UserRole> users;
+    private List<User> users;
 
     public Role(){
         this.users = new ArrayList<>();
     }
 
-    public List<UserRole> getUsers() {
+    public List<User> getUsers() {
         return users;
     }
 
-    public void setUsers(List<UserRole> users) {
+    public void setUsers(List<User> users) {
         this.users = users;
     }
 

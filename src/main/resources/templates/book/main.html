@@ -32,7 +32,7 @@
                 <tr th:each="book : ${books}">
                     <td>
                         <div class="card mb-4 border-0">
-                            <img th:src="@{/images/books/{imagePath}(imagePath=${book.image})}" class="card-img-top mx-auto" style="width: 190px; height: 300px; object-fit: cover;" alt="Book Cover">
+                            <img th:src="@{/images/books/{imagePath}(imagePath=${book.image})}" class="card-img mx-auto" style="width: 190px; height: 300px; object-fit: cover;" alt="Book Cover">
                         </div>
                     </td>
                     <td th:text="${book.title}"></td>

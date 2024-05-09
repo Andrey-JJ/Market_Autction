@@ -11,6 +11,7 @@ import ru.project.market_auction.repositories.UserRepository;
 import ru.project.market_auction.models.User;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -29,8 +30,6 @@ public class AuthUserDetailsService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        return user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getRole().getName()))
-                .collect(Collectors.toList());
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
     }
 }

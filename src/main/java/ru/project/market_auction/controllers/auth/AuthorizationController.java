@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.project.market_auction.models.Role;
 import ru.project.market_auction.models.User;
-import ru.project.market_auction.models.UserRole;
 import ru.project.market_auction.repositories.RoleRepository;
 import ru.project.market_auction.repositories.UserRepository;
-import ru.project.market_auction.repositories.UserRoleRepository;
 
 import java.util.Optional;
 
@@ -21,7 +19,6 @@ import java.util.Optional;
 public class AuthorizationController {
     @Autowired private UserRepository userRepository;
     @Autowired private RoleRepository roleRepository;
-    @Autowired private UserRoleRepository userRoleRepository;
     @Autowired private PasswordEncoder passwordEncoder;
 
     @GetMapping("/registration")
@@ -38,10 +35,8 @@ public class AuthorizationController {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Optional<Role> role = roleRepository.findByName("USER");
         if(!role.isEmpty()) {
-            UserRole userRole = new UserRole(user, role.get());
-            user.getRoles().add(userRole);
+            user.setRole(role.get());
             userRepository.save(user);
-            userRoleRepository.saveAll(user.getRoles());
         }
         return "redirect:/market/main";
     }
