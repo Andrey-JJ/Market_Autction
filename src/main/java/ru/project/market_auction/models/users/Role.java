@@ -1,16 +1,13 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.users;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
-@Data
 @AllArgsConstructor
 public class Role {
     @Id
@@ -24,16 +21,12 @@ public class Role {
     @OneToMany(mappedBy = "role")
     private List<User> users;
 
-    public Role(){
-        this.users = new ArrayList<>();
+    public Long getId() {
+        return id;
     }
 
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -44,11 +37,15 @@ public class Role {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public Role(){
+        this.users = new ArrayList<>();
     }
 }

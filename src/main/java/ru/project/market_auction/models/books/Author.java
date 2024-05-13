@@ -1,15 +1,13 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.books;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Table(name = "authors")
-@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Author {
@@ -26,9 +24,6 @@ public class Author {
     @Column(name = "middle_name")
     private String middleName;
 
-    @Column(name = "description")
-    private String description;
-
     @OneToMany(mappedBy = "author")
     private List<AuthorBook> books;
 
@@ -38,6 +33,38 @@ public class Author {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public List<AuthorBook> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<AuthorBook> books) {
+        this.books = books;
     }
 
     @Override

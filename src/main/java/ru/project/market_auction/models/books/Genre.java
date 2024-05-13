@@ -1,17 +1,15 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.books;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import ru.project.market_auction.models.books.Book;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "genres")
-@Data
 @AllArgsConstructor
-@NoArgsConstructor
 public class Genre {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +27,25 @@ public class Genre {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+
+    public Genre(){
+        this.books = new ArrayList<>();
     }
 }

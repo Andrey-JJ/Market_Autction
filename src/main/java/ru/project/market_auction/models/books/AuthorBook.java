@@ -1,13 +1,11 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.books;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "authorsbooks")
 @IdClass(AuthorBookId.class)
-@Data
 @NoArgsConstructor
 public class AuthorBook {
     @Id
@@ -22,6 +20,22 @@ public class AuthorBook {
 
     public AuthorBook(Book book, Author author){
         this.book = book;
+        this.author = author;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
         this.author = author;
     }
 }

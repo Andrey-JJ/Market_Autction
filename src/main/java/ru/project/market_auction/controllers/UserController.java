@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.market_auction.models.Role;
-import ru.project.market_auction.models.User;
+import ru.project.market_auction.models.users.Role;
+import ru.project.market_auction.models.users.User;
 import ru.project.market_auction.repositories.RoleRepository;
 import ru.project.market_auction.repositories.UserRepository;
 
@@ -32,6 +32,16 @@ public class UserController {
             return "redirect:/users/main";
         }
         model.addAttribute("user", user.get());
+        return "user/detail";
+    }
+
+    @GetMapping("/profile/{username}")
+    public String getUserProfile(Model model, @PathVariable("username") String username) {
+        User user = userRepository.findByLogin(username);
+        if (user == null) {
+            return "redirect:/";
+        }
+        model.addAttribute("user", user);
         return "user/detail";
     }
 

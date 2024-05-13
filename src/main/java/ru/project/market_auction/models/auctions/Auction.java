@@ -1,19 +1,16 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.auctions;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import ru.project.market_auction.models.users.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "auctions")
-@Data
 @AllArgsConstructor
 public class Auction {
     @Id
@@ -48,22 +45,6 @@ public class Auction {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public List<AuctionDetail> getAuctionDetails() {
-        return auctionDetails;
-    }
-
-    public void setAuctionDetails(List<AuctionDetail> auctionDetails) {
-        this.auctionDetails = auctionDetails;
-    }
-
-    public List<AuctionBid> getAuctionBids() {
-        return auctionBids;
-    }
-
-    public void setAuctionBids(List<AuctionBid> auctionBids) {
-        this.auctionBids = auctionBids;
     }
 
     public User getUser() {
@@ -104,6 +85,22 @@ public class Auction {
 
     public void setCurrentPrice(BigDecimal currentPrice) {
         this.currentPrice = currentPrice;
+    }
+
+    public List<AuctionDetail> getAuctionDetails() {
+        return auctionDetails;
+    }
+
+    public void setAuctionDetails(List<AuctionDetail> auctionDetails) {
+        this.auctionDetails = auctionDetails;
+    }
+
+    public List<AuctionBid> getAuctionBids() {
+        return auctionBids;
+    }
+
+    public void setAuctionBids(List<AuctionBid> auctionBids) {
+        this.auctionBids = auctionBids;
     }
 
     public Auction(){

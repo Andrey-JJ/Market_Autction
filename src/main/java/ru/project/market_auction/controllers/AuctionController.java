@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.market_auction.models.Auction;
-import ru.project.market_auction.models.User;
+import ru.project.market_auction.models.auctions.Auction;
+import ru.project.market_auction.models.users.User;
 import ru.project.market_auction.repositories.*;
 
 import java.util.ArrayList;

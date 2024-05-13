@@ -1,11 +1,10 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.auctions;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
+import ru.project.market_auction.models.books.Book;
 
 @Entity
 @Table(name = "auctions_detail")
@@ -34,5 +33,29 @@ public class AuctionDetail {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Auction getAuction() {
+        return auction;
+    }
+
+    public void setAuction(Auction auction) {
+        this.auction = auction;
+    }
+
+    public Integer getPositionNumber() {
+        return positionNumber;
+    }
+
+    public void setPositionNumber(Integer positionNumber) {
+        this.positionNumber = positionNumber;
+    }
+
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
     }
 }

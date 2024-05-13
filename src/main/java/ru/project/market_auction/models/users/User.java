@@ -1,20 +1,17 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.users;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import ru.project.market_auction.models.sales.BookSale;
+import ru.project.market_auction.models.sales.UserCart;
+import ru.project.market_auction.models.auctions.Auction;
+import ru.project.market_auction.models.auctions.AuctionBid;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-@Data
 @AllArgsConstructor
 public class User {
     @Id
@@ -53,10 +50,63 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<AuctionBid> auctionBids;
 
-    public User(){
-        this.bookSales = new ArrayList<>();
-        this.auctions = new ArrayList<>();
-        this.auctionBids = new ArrayList<>();
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserCart userCart;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Role getRole() {
@@ -91,28 +141,10 @@ public class User {
         this.auctionBids = auctionBids;
     }
 
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public User(){
+        this.bookSales = new ArrayList<>();
+        this.auctions = new ArrayList<>();
+        this.auctionBids = new ArrayList<>();
     }
 
     @Override

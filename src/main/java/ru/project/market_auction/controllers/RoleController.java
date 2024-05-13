@@ -4,8 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.market_auction.models.Role;
-import ru.project.market_auction.repositories.RoleRepository;
+import ru.project.market_auction.models.users.Role;
 import ru.project.market_auction.repositories.RoleRepository;
 
 import java.util.List;

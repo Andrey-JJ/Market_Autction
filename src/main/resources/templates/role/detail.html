@@ -28,10 +28,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="users : ${role.users}">
-                                <td th:text="${users.user.toString()}"></td>
-                                <td th:text="${users.user.login}"></td>
-                                <td th:text="${users.user.email}"></td>
+                            <tr th:each="user : ${role.users}">
+                                <td th:text="${user.toString()}"></td>
+                                <td th:text="${user.login}"></td>
+                                <td th:text="${user.email}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -42,7 +42,10 @@
             <a th:href="@{/roles/delete/{id}(id=${role.id})}" class="btn btn-danger">Удалить издателя</a>
         </div>
     </main>
-    <th:block th:replace="main/footer :: footer"></th:block>
+    <!-- Часть footer -->
+    <div class="container">
+        <th:block th:replace="main/footer :: footer"></th:block>
+    </div>
     <!--Скрипты для страницы-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.project.market_auction.models.*;
+import ru.project.market_auction.models.books.*;
 import ru.project.market_auction.repositories.*;
 
 import java.io.IOException;

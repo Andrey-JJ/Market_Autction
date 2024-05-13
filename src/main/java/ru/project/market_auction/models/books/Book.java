@@ -1,16 +1,13 @@
-package ru.project.market_auction.models;
+package ru.project.market_auction.models.books;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "books")
-@Data
 @AllArgsConstructor
 public class Book {
     @Id
@@ -48,20 +45,12 @@ public class Book {
         this.id = id;
     }
 
-    public String getImage() {
-        return image;
+    public String getTitle() {
+        return title;
     }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
-
-    public List<AuthorBook> getAuthors() {
-        return authors;
-    }
-
-    public void setAuthors(List<AuthorBook> authors) {
-        this.authors = authors;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Genre getGenre() {
@@ -78,6 +67,38 @@ public class Book {
 
     public void setPublisher(Publisher publisher) {
         this.publisher = publisher;
+    }
+
+    public Integer getPublicationYear() {
+        return publicationYear;
+    }
+
+    public void setPublicationYear(Integer publicationYear) {
+        this.publicationYear = publicationYear;
+    }
+
+    public Integer getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(Integer pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public List<AuthorBook> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(List<AuthorBook> authors) {
+        this.authors = authors;
     }
 
     public Book(){

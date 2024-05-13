@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.project.market_auction.models.Author;
+import ru.project.market_auction.models.books.Author;
 import ru.project.market_auction.repositories.AuthorRepository;
 
 import java.util.List;

@@ -48,8 +48,7 @@
                             <!-- Пользователь, создавший аукцион -->
                             <p class="d-flex justify-content-between" style="margin: -5px 0;">
                                 <span th:text="${auction.user.login}"></span>
-                                <span th:if="${auction.auctionType == 'ult'}">
-                                    Время: <img src="/images/logos/logo-infiniti.png" alt="Infiniti Logo" />
+                                <span th:if="${auction.auctionType == 'ult'}"> Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
                                 </span>
                                 <span th:if="${auction.auctionType != 'ult'}">
                                     <span class="text-end" th:text="${auction.auctionType}"></span> | Время: <span th:text="${auction.auctionDuration}"></span>

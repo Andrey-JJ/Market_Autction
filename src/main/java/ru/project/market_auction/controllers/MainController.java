@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import ru.project.market_auction.models.Auction;
-import ru.project.market_auction.models.BookSale;
-import ru.project.market_auction.models.User;
+import ru.project.market_auction.models.auctions.Auction;
+import ru.project.market_auction.models.sales.BookSale;
 import ru.project.market_auction.repositories.AuctionRepository;
 import ru.project.market_auction.repositories.BookSaleRepository;
 import ru.project.market_auction.repositories.UserRepository;
 
-import java.security.Principal;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 public class MainController {
