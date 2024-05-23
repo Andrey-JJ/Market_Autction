@@ -2,6 +2,7 @@ package ru.project.market_auction.models.sales;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import ru.project.market_auction.models.users.User;
 
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import java.util.List;
 @Entity
 @Table(name = "user_cart")
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +21,9 @@ public class UserCart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "userCart")
-    private List<UserCartDetail> details;
+    @ManyToOne
+    @JoinColumn(name = "booksale_id")
+    private BookSale bookSale;
 
     public Long getId() {
         return id;
@@ -38,15 +41,11 @@ public class UserCart {
         this.user = user;
     }
 
-    public List<UserCartDetail> getDetails() {
-        return details;
+    public BookSale getBookSale() {
+        return bookSale;
     }
 
-    public void setDetails(List<UserCartDetail> details) {
-        this.details = details;
-    }
-
-    public UserCart(){
-        this.details = new ArrayList<>();
+    public void setBookSale(BookSale bookSale) {
+        this.bookSale = bookSale;
     }
 }

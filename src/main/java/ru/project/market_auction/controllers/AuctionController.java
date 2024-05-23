@@ -57,7 +57,7 @@ public class AuctionController {
         // Устанавливаем тип аукциона в зависимости от выбранного значения в форме
         if ("Ограниченный".equals(auctionType)) {
             auction.setAuctionType("lt");
-        } else {
+        } else if("Неограниченный".equals(auctionType)) {
             auction.setAuctionType("ult");
         }
 

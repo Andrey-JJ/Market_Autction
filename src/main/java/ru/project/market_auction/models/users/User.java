@@ -38,7 +38,7 @@ public class User {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
 
     @OneToMany(mappedBy = "user")
@@ -50,8 +50,8 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<AuctionBid> auctionBids;
 
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private UserCart userCart;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserCart> userCarts = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -109,14 +109,6 @@ public class User {
         this.email = email;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public List<BookSale> getBookSales() {
         return bookSales;
     }
@@ -141,10 +133,27 @@ public class User {
         this.auctionBids = auctionBids;
     }
 
+    public Role getRole() {
+        return this.role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public List<UserCart> getUserCarts() {
+        return userCarts;
+    }
+
+    public void setUserCarts(List<UserCart> userCarts) {
+        this.userCarts = userCarts;
+    }
+
     public User(){
         this.bookSales = new ArrayList<>();
         this.auctions = new ArrayList<>();
         this.auctionBids = new ArrayList<>();
+        this.userCarts = new ArrayList<>();
     }
 
     @Override

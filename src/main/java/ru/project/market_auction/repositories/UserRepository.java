@@ -6,10 +6,12 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.project.market_auction.models.users.User;
 
+import java.util.Optional;
+
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByLogin(String login);
     User findByEmail(String email);
-    @Query(value = "SELECT * FROM users u WHERE u.login = :login OR u.email = :email LIMIT 1", nativeQuery = true)
-    User findByLoginOrEmail(@Param("login") String login, @Param("email") String email);
+    @Query(value = "SELECT * FROM users u WHERE u.login = :usernameOrEmail OR u.email = :usernameOrEmail LIMIT 1", nativeQuery = true)
+    Optional<User> findByLoginOrEmail(@Param("usernameOrEmail") String usernameOrEmail);
 }

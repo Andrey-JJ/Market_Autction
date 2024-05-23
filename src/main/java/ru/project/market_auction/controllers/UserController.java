@@ -1,6 +1,7 @@
 package ru.project.market_auction.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class UserController {
     @Autowired private UserRepository userRepository;
     @Autowired private RoleRepository roleRepository;
+    @Autowired private PasswordEncoder passwordEncoder;
 
     @GetMapping("/main")
     public String getAllUsers(Model model){
@@ -35,16 +37,6 @@ public class UserController {
         return "user/detail";
     }
 
-    @GetMapping("/profile/{username}")
-    public String getUserProfile(Model model, @PathVariable("username") String username) {
-        User user = userRepository.findByLogin(username);
-        if (user == null) {
-            return "redirect:/";
-        }
-        model.addAttribute("user", user);
-        return "user/detail";
-    }
-
     @GetMapping("/new")
     public String addUser(Model model){
         List<Role> roles = (List<Role>) roleRepository.findAll();
@@ -55,7 +47,15 @@ public class UserController {
 
     @PostMapping("/new")
     public String addUser(Model model, @ModelAttribute User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        Role role = roleRepository.findByName("USER");
+        if(role != null) {
+            user.setRole(role);
+        }
+
         userRepository.save(user);
+
         return "redirect:/users/" + user.getId();
     }
 

@@ -22,9 +22,9 @@
                     <h5>Издатель: <a th:href="@{/publishers/{id}(id=${book.publisher.id})}" th:text="${book.publisher.name}"></a> | <span th:text="${book.publicationYear}"></span></h5>
                     <h5>Авторы:
                         <span th:each="authors, iterStat : ${book.authors}">
-                    <a th:href="@{/authors/{id}(id=${authors.author.id})}" th:text="${authors.author.toString()}"></a>
-                    <span th:if="${not iterStat.last}">, </span>
-                </span>
+                            <a th:href="@{/authors/{id}(id=${authors.author.id})}" th:text="${authors.author.toString()}"></a>
+                            <span th:if="${not iterStat.last}">, </span>
+                        </span>
                     </h5>
                     <h5>Категория: <a th:href="@{/genres/{id}(id=${book.genre.id})}" th:text="${book.genre.name}"></a></h5>
                     <h5 th:text="'Кол-во страниц: ' + ${book.pageCount}"></h5>
@@ -36,6 +36,65 @@
                     <a th:href="@{/books/update/{id}(id=${book.id})}" class="btn btn-warning">Редактировать книгу</a>
                     <a th:href="@{/books/delete/{id}(id=${book.id})}" class="btn btn-danger">Удалить книгу</a>
                 </div>
+            </div>
+            <div class="row mt-3">
+                <h4>Список объявлений о продаже:</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Цена</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="sale : ${book.sales}">
+                        <td th:text="${sale.user.login}"></td>
+                        <td th:text="${sale.price}"></td>
+                        <td>
+                            <a href="#" class="btn btn-primary d-inline">Купить</a>
+                            <div class="d-inline">
+                                <a th:href="@{/market/add-to-cart/{id}(id=${sale.getId()})}" type="submit" class="btn btn-success">В корзину</a>
+                            </div>
+                            <div class="d-inline">
+                                <a th:href="@{/market/delete/{id}(id=${sale.getId()})}" type="submit" class="btn btn-danger">Удалить</a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row mt-3">
+                <h4>Список аукционов:</h4>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Пользователь</th>
+                        <th>Время</th>
+                        <th>Мин. Цена</th>
+                        <th>Тек. Цена</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ad : ${book.auctions}">
+                        <td th:text="${ad.auction.user.login}"></td>
+                        <th:block th:if="${ad.auction.auctionType != 'ult'}">
+                            <td th:text="${ad.auction.auctionDuration}"></td>
+                        </th:block>
+                        <th:block th:if="${ad.auction.auctionType == 'ult'}">
+                            <td>
+                                <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
+                            </td>
+                        </th:block>
+                        <td th:text="${ad.auction.minimumPrice}"></td>
+                        <td th:text="${ad.auction.currentPrice}"></td>
+                        <td>
+                            <a th:href="@{/auctions/{id}(id=${book.id})}" class="btn btn-success">Подробнее</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>

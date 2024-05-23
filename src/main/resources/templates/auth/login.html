@@ -13,26 +13,32 @@
     <!--Часть main-->
     <main>
         <div class="container mt-4">
-            <h2 class="mt-5 mb-3">Авторизация пользователя</h2>
-            <form th:action="@{/login}" method="post">
-                <div class="mb-3">
-                    <label for="loginOrEmail" class="form-label">Логин:</label>
-                    <input type="text" class="form-control" id="loginOrEmail" name="loginOrEmail" required>
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Пароль:</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                </div>
-                <!-- Добавляем поле для ошибки аутентификации -->
-                <div th:if="${error}" class="alert alert-danger" role="alert">
-                    Неверное логин пользователя или пароль.
-                </div>
-                <button type="submit" class="btn btn-primary">Вход</button>
-            </form>
-            <div class="row align-items-center">
-                <label for="changeButton" class="col-sm-2 col-form-label">Забыли пароль?</label>
-                <div class="col-sm-10">
-                    <a id="changeButton" th:href="@{/change-password}" class="text-success">Сменить пароль</a>
+            <div class="row">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="mt-5 mb-3">Авторизация пользователя</h2>
+                    </div>
+                    <form th:action="@{/login}" role="form" method="post">
+                        <div class="mb-3">
+                            <!--<label for="username" class="form-label">Логин:</label>-->
+                            <input type="text" class="form-control" id="username" name="username" autofocus="autofocus" placeholder="Логин" required>
+                        </div>
+                        <div class="mb-3">
+                            <!--<label for="password" class="form-label">Пароль:</label>-->
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Пароль" required>
+                        </div>
+                        <!-- Добавляем поле для ошибки аутентификации -->
+                        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+                            <p th:text="${error}"> Неверное логин пользователя или пароль.</p>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Вход</button>
+                    </form>
+                    <div class="row align-items-center">
+                        <label for="changeButton" class="col-sm-2 col-form-label">Забыли пароль?</label>
+                        <div class="col-sm-10">
+                            <a id="changeButton" th:href="@{/change-password}" class="text-success">Сменить пароль</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

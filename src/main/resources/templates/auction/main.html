@@ -29,8 +29,8 @@
         </div>
         <div th:each="auction : ${auctions}" class="card mb-3">
             <div class="row">
-                <div class="col-md-4">
-                    <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
+                <div class="col-auto" style="margin: 5px 0 5px 5px;">
+                    <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" style="width: 125px;">
                         <div class="carousel-indicators">
                             <!-- Отображение индикаторов для каждой книги -->
                             <th:block th:each="detail, iterStat : ${auction.auctionDetails}">
@@ -49,7 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                <div class="col">
                     <div class="card-body">
                         <!-- Получаем список деталей аукциона -->
                         <div class="row">
@@ -79,11 +79,11 @@
                             <p class="d-flex justify-content-between" style="margin: -5px 0;">
                                 <span th:text="${auction.user.login}"></span>
                                 <span th:if="${auction.auctionType == 'ult'}">
-                            Время: <img src="/images/logos/logo-infiniti.png" alt="Infiniti Logo" />
-                        </span>
+                                    Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
+                                </span>
                                 <span th:if="${auction.auctionType != 'ult'}">
-                            <span class="text-end" th:text="${auction.auctionType}"></span> | Время: <span th:text="${auction.auctionDuration}"></span>
-                        </span>
+                                    Время: <span th:text="${auction.auctionDuration}"></span>
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -92,7 +92,6 @@
         </div>
     </main>
     <!--Часть footer-->
-    <hr>
     <div class="container">
         <th:block th:replace="main/footer :: footer"></th:block>
     </div>

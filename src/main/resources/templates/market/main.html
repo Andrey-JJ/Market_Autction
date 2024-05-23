@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="/css/style.css" type="text/css" rel="stylesheet">
+    <title>Маркет</title>
+</head>
+<body>
+    <!--Часть header-->
+    <th:block th:replace="main/header :: header"></th:block>
+    <!--Часть main-->
+    <main>
+        <div class="container mt-4">
+            <a th:href="@{/market/new}" class="btn btn-success mb-3">Создать объявление</a>
+            <div th:each="bookSale : ${bookSales}" class="card mb-3">
+                <div class="row">
+                    <div class="col-auto" style="margin: 5px 0 5px 5px;">
+                        <a th:href="@{/books/{id}(id=${bookSale.book.id})}">
+                            <img class="img-fluid card-img mx-auto" style="width: 125px; height: 180px; object-fit: cover;" th:src="@{/images/books/{imagePath}(imagePath=${bookSale.book.image})}" alt="Book Image">
+                        </a>
+                    </div>
+                    <div class="col">
+                        <div class="card-body">
+                            <div class="row">
+                                <p style="margin: -5px 0;">
+                                    <a th:href="@{/books/{id}(id=${bookSale.book.id})}">
+                                        <span th:text="${bookSale.book.title}"></span>
+                                    </a>
+                                </p>
+                            </div>
+                            <hr>
+                            <div class="row text-end">
+                                <div>
+                                    <p style="margin: -5px 0;">Цена: <span th:text="${bookSale.price}"></span></p>
+                                    <p style="margin: -5px 0;">Издатель: <span th:text="${bookSale.book.publisher.name}"></span> | <span th:text="${bookSale.book.publicationYear}"></span></p>
+                                    <p style="margin: -5px 0;">Жанр: <span th:text="${bookSale.book.genre.name}"></span></p>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <p class="d-flex justify-content-between" style="margin: -5px 0;">
+                                    <span th:text="${bookSale.user.login}"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto" style="margin-left: -20px;">
+                        <div class="row mt-5">
+                            <!-- Кнопка "Купить" -->
+                            <button href="#" class="btn btn-primary mb-2">Купить</button>
+                        </div>
+                        <div class="row">
+                            <!-- Кнопка "В корзину" -->
+                            <a th:href="@{/market/add-to-cart/{id}(id=${bookSale.id})}" class="btn btn-success">В корзину</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Часть footer -->
+    <div class="container">
+        <th:block th:replace="main/footer :: footer"></th:block>
+    </div>
+    <!--Скрипты для страницы-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</body>
+</html>

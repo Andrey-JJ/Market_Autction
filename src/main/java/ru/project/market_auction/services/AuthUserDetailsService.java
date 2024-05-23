@@ -1,4 +1,4 @@
-package ru.project.market_auction.services.auth;
+package ru.project.market_auction.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,22 +12,26 @@ import ru.project.market_auction.models.users.User;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class AuthUserDetailsService implements UserDetailsService {
-    @Autowired
-    UserRepository userRepository;
+    @Autowired private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByLogin(username);
-        if (user == null) {
-            throw new UsernameNotFoundException("User not found");
+        if(user == null){
+            throw new UsernameNotFoundException("No user found with login");
         }
-        return new org.springframework.security.core.userdetails.User(user.getLogin(), user.getPassword(), getAuthorities(user));
-    }
+        UserDetails details =  org.springframework.security.core.userdetails.User.builder()
+                .username(user.getLogin())
+                .password(user.getPassword())
+                .roles(user.getRole().getName())
+                .build();
 
-    private Collection<? extends GrantedAuthority> getAuthorities(User user) {
-        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole().getName()));
+        return details;
     }
 }

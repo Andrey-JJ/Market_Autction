@@ -2,6 +2,9 @@ package ru.project.market_auction.models.books;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import ru.project.market_auction.models.auctions.Auction;
+import ru.project.market_auction.models.auctions.AuctionDetail;
+import ru.project.market_auction.models.sales.BookSale;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,12 @@ public class Book {
 
     @OneToMany(mappedBy = "book")
     private List<AuthorBook> authors;
+
+    @OneToMany(mappedBy = "book")
+    private List<BookSale> sales;
+
+    @OneToMany(mappedBy = "book")
+    private List<AuctionDetail> auctions;
 
     public Long getId() {
         return id;
@@ -101,7 +110,25 @@ public class Book {
         this.authors = authors;
     }
 
+    public List<BookSale> getSales() {
+        return sales;
+    }
+
+    public void setSales(List<BookSale> sales) {
+        this.sales = sales;
+    }
+
+    public List<AuctionDetail> getAuctions() {
+        return auctions;
+    }
+
+    public void setAuctions(List<AuctionDetail> auctions) {
+        this.auctions = auctions;
+    }
+
     public Book(){
-        this.authors = new ArrayList<AuthorBook>();
+        this.authors = new ArrayList<>();
+        this.sales = new ArrayList<>();
+        this.auctions = new ArrayList<>();
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="https://www.thymeleaf.org">
+<html lang="ru" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +10,7 @@
 <body>
     <!--Часть header-->
     <th:block th:replace="main/header :: header"></th:block>
+
     <!--Часть main-->
     <main class="container mt-4">
         <div class="row">
@@ -20,40 +21,67 @@
                 </div>
                 <!-- Вывод всех записей из списка auctions -->
                 <div th:each="auction : ${auctions}" class="card mb-3">
-                    <div class="card-body">
-                        <!-- Получаем список деталей аукциона -->
-                        <div class="row">
-                            <p style="margin: -5px 0;">
-                                <th:block th:each="detail, iterStat : ${auction.auctionDetails}">
-                                    <!-- Получаем название книги из детали аукциона -->
-                                    <a th:href="@{'/auctions/' + ${auction.id}}">
-                                        <span th:text="${detail.book.title}"></span>
-                                        <span th:if="${not iterStat.last}">, </span>
-                                    </a>
-                                </th:block>
-                            </p>
-                        </div>
-                        <!-- Выводим минимальную и текущую цены -->
-                        <hr>
-                        <div class="row text-end">
-                            <div>
-                                <p style="margin: -5px 0;">Мин. цена: <span th:text="${auction.minimumPrice}"></span> р.</p>
-                                <p style="margin: -5px 0;">Тек. цена: <span th:text="${auction.currentPrice}"></span> р.</p>
-                                <!-- Количество ставок -->
-                                <p style="margin: -5px 0;">Кол-во ставок: <span th:text="${auction.auctionBids.size()}"></span></p>
+                    <div class="row">
+                        <div class="col-auto" style="margin: 5px 0 5px 5px;">
+                            <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel" style="width: 125px;">
+                                <div class="carousel-indicators">
+                                    <!-- Отображение индикаторов для каждой книги -->
+                                    <th:block th:each="detail, iterStat : ${auction.auctionDetails}">
+                                        <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" th:data-bs-slide-to="${iterStat.index}"
+                                                th:classappend="${iterStat.index == 0} ? 'active'">
+                                        </button>
+                                    </th:block>
+                                </div>
+                                <div class="carousel-inner">
+                                    <!-- Вывод изображений книг -->
+                                    <th:block th:each="detail, iterStat : ${auction.auctionDetails}">
+                                        <div class="carousel-item" th:classappend="${iterStat.index == 0} ? 'active'">
+                                            <a th:href="@{'/auctions/' + ${auction.id}}">
+                                                <img class="img-fluid card-img mx-auto" style="width: 125px; height: 180px; object-fit: cover;" th:src="@{/images/books/{imagePath}(imagePath=${detail.book.image})}" alt="Book Image">
+                                            </a>
+                                        </div>
+                                    </th:block>
+                                </div>
                             </div>
                         </div>
-                        <hr>
-                        <div class="row">
-                            <!-- Пользователь, создавший аукцион -->
-                            <p class="d-flex justify-content-between" style="margin: -5px 0;">
-                                <span th:text="${auction.user.login}"></span>
-                                <span th:if="${auction.auctionType == 'ult'}"> Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
-                                </span>
-                                <span th:if="${auction.auctionType != 'ult'}">
-                                    <span class="text-end" th:text="${auction.auctionType}"></span> | Время: <span th:text="${auction.auctionDuration}"></span>
-                                </span>
-                            </p>
+                        <div class="col">
+                            <div class="card-body">
+                                <!-- Получаем список деталей аукциона -->
+                                <div class="row">
+                                    <p style="margin: -5px 0;">
+                                        <th:block th:each="detail, iterStat : ${auction.auctionDetails}">
+                                            <!-- Получаем название книги из детали аукциона -->
+                                            <a th:href="@{'/auctions/' + ${auction.id}}">
+                                                <span th:text="${detail.book.title}"></span>
+                                                <span th:if="${not iterStat.last}">, </span>
+                                            </a>
+                                        </th:block>
+                                    </p>
+                                </div>
+                                <!-- Выводим минимальную и текущую цены -->
+                                <hr>
+                                <div class="row text-end">
+                                    <div>
+                                        <p style="margin: -5px 0;">Мин. цена: <span th:text="${auction.minimumPrice}"></span> р.</p>
+                                        <p style="margin: -5px 0;">Тек. цена: <span th:text="${auction.currentPrice}"></span> р.</p>
+                                        <!-- Количество ставок -->
+                                        <p style="margin: -5px 0;">Кол-во ставок: <span th:text="${auction.auctionBids.size()}"></span></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <!-- Пользователь, создавший аукцион -->
+                                    <p class="d-flex justify-content-between" style="margin: -5px 0;">
+                                        <span th:text="${auction.user.login}"></span>
+                                        <span th:if="${auction.auctionType == 'ult'}">
+                                            Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
+                                        </span>
+                                        <span th:if="${auction.auctionType != 'ult'}">
+                                            Время: <span th:text="${auction.auctionDuration}"></span>
+                                        </span>
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -64,18 +92,56 @@
                     <a th:href="@{/market/main}" class="btn btn-primary btn-lg mb-3" style="width: 200px">Маркет</a>
                 </div>
                 <!-- Вывод всех записей из списка bookSales -->
-                <!--<div th:each="bookSale : ${bookSales}" class="card mb-3">
-                    <div class="card-body">
-                        &lt;!&ndash; Отображение данных продажи книги &ndash;&gt;
-                        <p><span th:text="${bookSale.book.title}"></span></p>
-                        <p>Цена: <span th:text="${bookSale.price}"></span></p>
+                <div th:each="bookSale : ${bookSales}" class="card mb-3">
+                    <div class="row">
+                        <div class="col-auto" style="margin: 5px 0 5px 5px;">
+                            <a th:href="@{/books/{id}(id=${bookSale.book.id})}">
+                                <img class="img-fluid card-img mx-auto" style="width: 125px; height: 180px; object-fit: cover;" th:src="@{/images/books/{imagePath}(imagePath=${bookSale.book.image})}" alt="Book Image">
+                            </a>
+                        </div>
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="row">
+                                    <p style="margin: -5px 0;">
+                                        <a th:href="@{/books/{id}(id=${bookSale.book.id})}">
+                                            <span th:text="${bookSale.book.title}"></span>
+                                        </a>
+                                    </p>
+                                </div>
+                                <hr>
+                                <div class="row text-end">
+                                    <div>
+                                        <p style="margin: -5px 0;">Цена: <span th:text="${bookSale.price}"></span></p>
+                                        <p style="margin: -5px 0;">Издатель: <span th:text="${bookSale.book.publisher.name}"></span> | <span th:text="${bookSale.book.publicationYear}"></span></p>
+                                        <p style="margin: -5px 0;">Жанр: <span th:text="${bookSale.book.genre.name}"></span></p>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <p class="d-flex justify-content-between" style="margin: -5px 0;">
+                                        <span th:text="${bookSale.user.login}"></span>
+                                        <span><button class="btn btn-primary mb-2">Купить</button></span>
+                                        <span><a th:href="@{/market/add-to-cart/{id}(id=${bookSale.id})}" class="btn btn-success">В корзину</a> </span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-auto" style="margin-left: -20px;">
+                            <div class="row mt-5">
+                                <!-- Кнопка "Купить" -->
+                                <button class="btn btn-primary mb-2">Купить</button>
+                            </div>
+                            <div class="row">
+                                <!-- Кнопка "В корзину" -->
+                                <button class="btn btn-success">В корзину</button>
+                            </div>
+                        </div>
                     </div>
-                </div>-->
+                </div>
             </div>
         </div>
     </main>
     <!--Часть footer-->
-    <hr>
     <div class="container">
         <th:block th:replace="main/footer :: footer"></th:block>
     </div>

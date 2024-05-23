@@ -1,9 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link th:href="@{/css/style.css}" type="text/css" rel="stylesheet">
+  <title>Главная страница</title>
+</head>
+<body>
 <header class="p-3" style="background-color: #273248;">
   <div class="container">
     <div class="d-flex flex-wrap align-items-center justify-content-between">
       <!-- Иконка сайта -->
       <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-decoration-none">
-          <img src="/images/logos/logo.png" alt="mdo" width="32" height="32" class="rounded-circle" style="max-height: 32px;">
+        <img src="/images/logos/logo.png" alt="mdo" width="32" height="32" class="rounded-circle" style="max-height: 32px;">
       </a>
 
       <!-- Панель навигации по сайту -->
@@ -12,7 +22,7 @@
         <li class="nav-item"><a href="/market/main" class="nav-link px-2">Маркет</a></li>
         <li class="nav-item"><a href="/auctions/main" class="nav-link px-2">Аукцион</a></li>
         <li class="nav-item"><a href="/about" class="nav-link px-2">О нас</a></li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
           <a class="nav-link dropdown-toggle tables-dropdown" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: rgb(255, 235, 210, 50%);">Список таблиц</a>
           <ul class="dropdown-menu" style="background-color: #273248;" aria-labelledby="navbarDropdown">
             <li><a class="dropdown-item" href="/books/main">Книги</a></li>
@@ -35,12 +45,17 @@
       <div sec:authorize="isAuthenticated()" class="dropdown text-end">
         <a class="d-flex align-items-center link-body-emphasis text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">
           <img src="/images/logos/user-icon.png" alt="mdo" width="32" height="32" class="rounded-circle" style="max-height: 32px;">
-          <span class="dropdown-toggle ms-2" style="color: rgb(255, 235, 210);"></span>
+          <span class="dropdown-toggle ms-2" style="color: rgb(255, 235, 210);" th:text="${#authentication.name}"></span>
         </a>
         <ul class="dropdown-menu" style="background-color: #273248;">
-          <li><a class="dropdown-item" th:href="@{/users/profile/{username}(username=${admin})}">Профиль</a></li>
+          <li><a class="dropdown-item" th:href="@{/profile/{username}(username=${#authentication.name})}">Профиль</a></li>
+          <li><a class="dropdown-item" th:href="@{/profile/cart/{username}(username=${#authentication.name})}">Корзина</a></li>
           <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#">Выход</a></li>
+          <li>
+            <form th:action="@{/logout}" method="post" style="margin: 0;">
+              <button type="submit" class="dropdown-item logout-button">Выход</button>
+            </form>
+          </li>
         </ul>
       </div>
 
@@ -83,19 +98,21 @@
               </ul>
             </li>
             <!-- Иконка пользователя -->
-            <li sec:authorize="isAuthenticated()" class="nav-item mb-2">
+            <!--<li sec:authorize="isAuthenticated()" class="nav-item mb-2">
               <a class="d-block link-body-emphasis text-decoration-none">
                 <img src="/images/logos/user-icon.png" alt="mdo" width="32" height="32" class="rounded-circle" style="max-height: 32px;">
-                <span class="ms-2">Администратор</span>
+                <span class="ms-2">????</span>
               </a>
             </li>
             <div sec:authorize="isAnonymous()" class="text-end ml-5">
               <button th:href="@{/login}" type="button" class="btn btn-outline-light me-2">Вход</button>
               <button th:href="@{/registration}" type="button" class="btn btn-warning">Регистрация</button>
-            </div>
+            </div>-->
           </ul>
         </div>
       </div>
     </div>
   </div>
 </header>
+</body>
+</html>
