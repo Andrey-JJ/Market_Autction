@@ -48,4 +48,9 @@ public class UserCart {
     public void setBookSale(BookSale bookSale) {
         this.bookSale = bookSale;
     }
+
+    public UserCart(User user, BookSale bookSale){
+        this.user = user;
+        this.bookSale = bookSale;
+    }
 }

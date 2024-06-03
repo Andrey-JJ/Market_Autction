@@ -6,6 +6,7 @@ import ru.project.market_auction.models.users.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class Auction {
     private String auctionType;
 
     @Column(name = "auction_duration")
-    private LocalDateTime auctionDuration;
+    private LocalTime auctionDuration;
 
     @Column(name = "minimum_price")
     private BigDecimal minimumPrice;
@@ -63,11 +64,11 @@ public class Auction {
         this.auctionType = auctionType;
     }
 
-    public LocalDateTime getAuctionDuration() {
+    public LocalTime getAuctionDuration() {
         return auctionDuration;
     }
 
-    public void setAuctionDuration(LocalDateTime auctionDuration) {
+    public void setAuctionDuration(LocalTime auctionDuration) {
         this.auctionDuration = auctionDuration;
     }
 

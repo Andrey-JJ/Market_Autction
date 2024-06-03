@@ -1,7 +1,6 @@
 .offcan-btn{
     display: none;
 }
-
 .offcan-btn-content{
     width: 45px;
     height: 35px;
@@ -15,12 +14,10 @@
     overflow: hidden;
     padding: auto;
 }
-
 .offcan-btn-content:hover{
     border: rgba(255, 235, 210, 100%) solid 2px;
     color: rgba(255, 235, 210, 100%);
 }
-
 .offcan-btn-content-child{
     width: 60%;
     height: 2px;
@@ -29,7 +26,6 @@
     transform-origin: left;
     margin: 3px 0px;
 }
-
 .offcan-btn-content:hover .offcan-btn-content-child{
     background-color: rgba(255, 235, 210, 100%);
 }
@@ -37,35 +33,28 @@
 .search-line{
     display: flex;
 }
-
 .nav{
     display: flex;
 }
-
 @media (max-width: 990px){
     .nav{
         display: none;
     }
-
     .offcan-btn{
         display: block;
     }
-
     .search-line{
         max-width: 200px;
         min-width: 100px;
     }
 }
-
 .nav-link{
     color: rgba(255, 235, 210, 50%);
 }
-
 .nav-link:hover {
     color: #ffebd2;
     border-bottom: 2px solid #fc7643;
 }
-
 .nav-link:active {
     color: #ffebd2;
     border-bottom: 2px solid #fc7643;
@@ -83,15 +72,12 @@
 .tables-dropdown:hover{
     color: #ffebd2;
 }
-
 .dropdown-item {
     color: #ffebd2;
 }
-
 .dropdown-item:focus {
     color: #ffebd2;
 }
-
 .dropdown-item:hover {
     color: #ffebd2;
     background-color: #fc7643;
@@ -108,8 +94,7 @@ footer {
     display: footer;
 }
 
-<style>
-    .dropdown-item.logout-button {
+.dropdown-item.logout-button {
         background: none;
         border: none;
         padding: 0;
@@ -118,5 +103,29 @@ footer {
         text-align: left;
         width: 100%;
         cursor: pointer;
-    }
-</style>
+}
+
+.cart-container {
+    display: flex;
+    justify-content: space-between;
+}
+.cart-items {
+    width: 70%;
+}
+.cart-summary {
+    width: 25%;
+    padding-left: 20px;
+}
+.quantity-controls {
+    display: flex;
+    align-items: center;
+}
+.quantity-controls button {
+    margin: 0 5px;
+}
+.form-check-input {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-top: 1.25rem;
+    margin-left: 1.25rem;
+}

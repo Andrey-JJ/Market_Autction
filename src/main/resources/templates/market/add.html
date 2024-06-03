@@ -1,40 +1,134 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="https://www.thymeleaf.org">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" type="text/css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link href="/css/style.css" type="text/css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="/css/style.css" rel="stylesheet">
     <title>Создание объявления</title>
 </head>
 <body>
-    <!--Часть header-->
-    <th:block th:replace="main/header :: header"></th:block>
-    <!--Часть main-->
-    <main>
-        <div class="container mt-4">
-            <h2 class="mt-5 mb-3">Создание объявления</h2>
-            <form action="#" th:action="@{/market/new}" method="post" th:object="${bookSale}">
-                <div class="form-group mb-3">
-                    <label for="selectedBook">Книга:</label>
-                    <input type="text" id="selectedBook" name="selectedBook" class="form-control" list="books" placeholder="Выберите книгу">
-                    <datalist id="books">
-                        <option th:each="book : ${books}" th:text="${book.title + '/' + book.publisher.name + '/' + book.publicationYear}"></option>
+<!-- Часть header -->
+<th:block th:replace="main/header :: header"></th:block>
+<!-- Часть main -->
+<main>
+    <div class="container mt-4">
+        <h2 class="mt-5 mb-3">Создание объявления</h2>
+        <form th:action="@{/market/new}" method="post">
+            <div class="form-group">
+                <label for="bookTitle">Выберите книгу:</label>
+                <input list="bookTitles" id="bookTitle" name="bookTitle" class="form-control">
+                <datalist id="bookTitles">
+                    <option th:each="book : ${books}"
+                            th:value="${book.title}"
+                            th:text="${book.title}"
+                            th:data-genre="${book.genre.name}"
+                            th:data-publisher="${book.publisher.name}"
+                            th:data-publicationyear="${book.publicationYear}"
+                            th:data-pagecount="${book.pageCount}"></option>
+                </datalist>
+            </div>
+
+            <button id="toggleForm" type="button" class="btn btn-primary mb-3">Показать/Скрыть параметры поиска</button>
+            <div id="searchForm" style="display:none;" class="mb-4">
+                <div class="form-group">
+                    <label for="genre">Жанр:</label>
+                    <input list="genres" id="genre" name="genre" class="form-control">
+                    <datalist id="genres">
+                        <option th:each="genre : ${genres}" th:value="${genre.name}" th:text="${genre.name}"></option>
                     </datalist>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="price">Цена:</label>
-                    <input type="text" id="price" class="form-control" name="price" th:field="*{price}">
+                <div class="form-group">
+                    <label for="publisher">Издатель:</label>
+                    <input list="publishers" id="publisher" name="publisher" class="form-control">
+                    <datalist id="publishers">
+                        <option th:each="publisher : ${publishers}" th:value="${publisher.name}" th:text="${publisher.name}"></option>
+                    </datalist>
                 </div>
-                <button class="btn btn-primary" type="submit">Создать</button>
-            </form>
-        </div>
-    </main>
-    <!-- Часть footer -->
-    <div class="container">
-        <th:block th:replace="main/footer :: footer"></th:block>
+                <div class="form-group">
+                    <label for="publicationYear">Год издания:</label>
+                    <input type="number" id="publicationYear" name="publicationYear" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="pageCount">Объем (страниц):</label>
+                    <input type="number" id="pageCount" name="pageCount" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="price">Цена:</label>
+                <input type="number" id="price" name="price" class="form-control">
+            </div>
+
+            <button class="btn btn-primary" type="submit">Создать</button>
+        </form>
     </div>
-    <!--Скрипты для страницы-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+</main>
+<!-- Часть footer -->
+<div class="container">
+    <th:block th:replace="main/footer :: footer"></th:block>
+</div>
+<!-- Скрипты для страницы -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5+5hb7U5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5l6a5" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const toggleFormBtn = document.getElementById("toggleForm");
+        const searchForm = document.getElementById("searchForm");
+
+        toggleFormBtn.addEventListener("click", function() {
+            if (searchForm.style.display === "none" || searchForm.style.display === "") {
+                searchForm.style.display = "block";
+            } else {
+                searchForm.style.display = "none";
+            }
+        });
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        $("#toggleForm").on("click", function() {
+            $("#searchForm").toggle();
+        });
+
+        $("#genre, #publisher, #publicationYear, #pageCount").on("input", function() {
+            updateBookTitles();
+        });
+
+        function updateBookTitles() {
+            const genre = $('#genre').val().toLowerCase();
+            const publisher = $('#publisher').val().toLowerCase();
+            const publicationYear = $('#publicationYear').val();
+            const pageCount = $('#pageCount').val();
+
+            // Получаем изначальный список книг из глобальной переменной или запрашиваем его с сервера
+            var bookOptions = []; // Здесь должен быть ваш массив с данными книг
+
+            // Очищаем текущий datalist
+            $('#bookTitles').empty();
+
+            // Фильтруем и добавляем отфильтрованные опции обратно в datalist
+            bookOptions.forEach(function(book) {
+                const bookGenre = book.genre.name.toLowerCase();
+                const bookPublisher = book.publisher.name.toLowerCase();
+                const bookPublicationYear = book.publicationYear;
+                const bookPageCount = book.pageCount;
+
+                const matchGenre = !genre || bookGenre.includes(genre);
+                const matchPublisher = !publisher || bookPublisher.includes(publisher);
+                const matchYear = !publicationYear || bookPublicationYear == publicationYear;
+                const matchPageCount = !pageCount || bookPageCount == pageCount;
+
+                if (matchGenre && matchPublisher && matchYear && matchPageCount) {
+                    $('#bookTitles').append(`<option value="${book.title}"
+                                              data-genre="${book.genre.name}"
+                                              data-publisher="${book.publisher.name}"
+                                              data-publicationyear="${bookPublicationYear}"
+                                              data-pagecount="${bookPageCount}">${book.title}</option>`);
+                }
+            });
+        }
+    });
+</script>
 </body>
 </html>

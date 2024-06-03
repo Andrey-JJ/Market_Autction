@@ -72,7 +72,7 @@
                                 <div class="row">
                                     <!-- Пользователь, создавший аукцион -->
                                     <p class="d-flex justify-content-between" style="margin: -5px 0;">
-                                        <span th:text="${auction.user.login}"></span>
+                                        <span th:text="'Продавец - ' + ${auction.user.login}"></span>
                                         <span th:if="${auction.auctionType == 'ult'}">
                                             Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
                                         </span>
@@ -119,22 +119,34 @@
                                 <hr>
                                 <div class="row">
                                     <p class="d-flex justify-content-between" style="margin: -5px 0;">
-                                        <span th:text="${bookSale.user.login}"></span>
-                                        <span><button class="btn btn-primary mb-2">Купить</button></span>
-                                        <span><a th:href="@{/market/add-to-cart/{id}(id=${bookSale.id})}" class="btn btn-success">В корзину</a> </span>
+                                        <span th:text="'Продавец - ' + ${bookSale.user.login}"></span>
                                     </p>
                                 </div>
                             </div>
                         </div>
                         <div class="col-auto" style="margin-left: -20px;">
-                            <div class="row mt-5">
-                                <!-- Кнопка "Купить" -->
-                                <button class="btn btn-primary mb-2">Купить</button>
-                            </div>
-                            <div class="row">
-                                <!-- Кнопка "В корзину" -->
-                                <button class="btn btn-success">В корзину</button>
-                            </div>
+                            <th:block th:if="${bookSale.user.login == #authentication.name}">
+                                <div class="row mt-5">
+                                    <!-- Кнопка "Купить" -->
+                                    <button th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</button>
+                                </div>
+                                <div class="row">
+                                    <!-- Кнопка "В корзину" -->
+                                    <button th:href="@{/market/delete/{id}(id=${bookSale.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</button>
+                                </div>
+                            </th:block>
+                            <th:block th:unless="${bookSale.user.login == #authentication.name}">
+                                <div class="row mt-5">
+                                    <!-- Кнопка "Купить" -->
+                                    <button class="btn btn-primary mb-2" style="width: 99.7px;">Купить</button>
+                                </div>
+                                <div class="row">
+                                    <!-- Кнопка "В корзину" -->
+                                    <form th:href="@{/market/add-to-cart/{id}(id=${bookSale.id})}" method="post">
+                                        <button type="submit" class="btn btn-success" style="width: 99.7px; margin-left: -12px;">В корзину</button>
+                                    </form>
+                                </div>
+                            </th:block>
                         </div>
                     </div>
                 </div>

@@ -41,30 +41,91 @@
                             <hr>
                             <div class="row">
                                 <p class="d-flex justify-content-between" style="margin: -5px 0;">
-                                    <span th:text="${bookSale.user.login}"></span>
+                                    <span th:text="'Продавец - ' + ${bookSale.user.login}"></span>
                                 </p>
                             </div>
                         </div>
                     </div>
                     <div class="col-auto" style="margin-left: -20px;">
-                        <div class="row mt-5">
-                            <!-- Кнопка "Купить" -->
-                            <button href="#" class="btn btn-primary mb-2">Купить</button>
-                        </div>
-                        <div class="row">
-                            <!-- Кнопка "В корзину" -->
-                            <a th:href="@{/market/add-to-cart/{id}(id=${bookSale.id})}" class="btn btn-success">В корзину</a>
-                        </div>
+                        <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <div class="row mt-1">
+                                <!-- Кнопка "Купить" -->
+                                <a class="btn btn-primary mb-2" style="width: 99.7px;">Купить</a>
+                            </div>
+                            <div class="row mb-2">
+                                <!-- Кнопка "В корзину" -->
+                                <form class="add-to-cart-form" data-book-id="${bookSale.id}">
+                                    <button type="submit" class="btn btn-success" style="width: 99.7px; margin-left: -12px;">В корзину</button>
+                                </form>
+                            </div>
+                            <div class="row">
+                                <!-- Кнопка "Изменить" -->
+                                <a th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</a>
+                            </div>
+                            <div class="row">
+                                <!-- Кнопка "Удалить" -->
+                                <a th:href="@{/market/delete/{id}(id=${bookSale.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</a>
+                            </div>
+                        </th:block>
+                        <th:block th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+                            <th:block th:if="${bookSale.user.login == #authentication.name}">
+                                <div class="row mt-5">
+                                    <!-- Кнопка "Изменить" -->
+                                    <a th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</a>
+                                </div>
+                                <div class="row">
+                                    <!-- Кнопка "Удалить" -->
+                                    <a th:href="@{/market/delete/{id}(id=${bookSale.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</a>
+                                </div>
+                            </th:block>
+                            <th:block th:unless="${bookSale.user.login == #authentication.name}">
+                                <div class="row mt-5">
+                                    <!-- Кнопка "Купить" -->
+                                    <a class="btn btn-primary mb-2" style="width: 99.7px;">Купить</a>
+                                </div>
+                                <div class="row">
+                                    <!-- Кнопка "В корзину" -->
+                                    <form class="add-to-cart-form" data-book-id="${bookSale.id}">
+                                        <button type="submit" class="btn btn-success">В корзину</button>
+                                    </form>
+                                </div>
+                            </th:block>
+                        </th:block>
                     </div>
                 </div>
             </div>
         </div>
     </main>
     <!-- Часть footer -->
-    <div class="container">
-        <th:block th:replace="main/footer :: footer"></th:block>
-    </div>
+    <th:block th:replace="main/footer :: footer"></th:block>
     <!--Скрипты для страницы-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('.add-to-cart-form').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    let id = this.dataset.bookId;
+
+                    fetch(`/market/add-to-cart/${id}`, {
+                        method: 'POST',
+                        // Указываем необходимые HTTP headers, если это требуется
+                        // например, headers: { 'Content-Type': 'application/json' },
+                        // и body: JSON.stringify(данные), если вы отправляете JSON
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        // обработка успешного добавления в корзину
+                        // например, визуально обновить количество товаров в корзине
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        // обработка возможной ошибки
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>

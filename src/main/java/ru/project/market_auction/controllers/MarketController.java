@@ -1,16 +1,22 @@
 package ru.project.market_auction.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.project.market_auction.models.books.Book;
+import ru.project.market_auction.models.books.Genre;
+import ru.project.market_auction.models.books.Publisher;
 import ru.project.market_auction.models.sales.BookSale;
+import ru.project.market_auction.models.sales.UserCart;
 import ru.project.market_auction.models.users.User;
-import ru.project.market_auction.repositories.BookRepository;
-import ru.project.market_auction.repositories.BookSaleRepository;
-import ru.project.market_auction.repositories.UserRepository;
+import ru.project.market_auction.repositories.*;
 
+import java.math.BigDecimal;
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +25,12 @@ import java.util.Optional;
 public class MarketController {
     @Autowired private BookSaleRepository marketRepository;
     @Autowired private BookRepository bookRepository;
+    @Autowired private GenreRepository genreRepository;
+    @Autowired private PublisherRepository publisherRepository;
     @Autowired private UserRepository userRepository;
+    @Autowired private UserCartRepository userCartRepository;
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/main")
     public String getAll(Model model){
         List<BookSale> all = (List<BookSale>) marketRepository.findAll();
@@ -28,38 +38,40 @@ public class MarketController {
         return "market/main";
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/new")
     public String addNewSale(Model model){
         List<Book> books = (List<Book>) bookRepository.findAll();
-
-        model.addAttribute("bookSale", new BookSale());
+        List<Genre> genres = (List<Genre>) genreRepository.findAll();
+        List<Publisher> publishers = (List<Publisher>) publisherRepository.findAll();
         model.addAttribute("books", books);
+        model.addAttribute("genres", genres);
+        model.addAttribute("publishers", publishers);
         return "market/add";
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/new")
-    public String addNewSale(Model model, @RequestParam String selectedBook, @ModelAttribute BookSale bookSale){
-        String[] bookData = selectedBook.split("/");
-        Book book = bookRepository.findByTitleAndPublisherAndPublicationYear(bookData[0], bookData[1], Integer.parseInt(bookData[2]));
-        bookSale.setBook(book);
+    public String addNewSale(Model model, Principal principal, @RequestParam("bookTitle") String bookTitle, @RequestParam("price") BigDecimal price){
+        Book book = bookRepository.findByTitle(bookTitle);
+        User user = userRepository.findByLogin(principal.getName());
 
-        User user = userRepository.findByLogin("admin");
+        BookSale bookSale = new BookSale();
         bookSale.setUser(user);
+        bookSale.setBook(book);
+        bookSale.setPrice(price);
 
         marketRepository.save(bookSale);
 
-        user.getBookSales().add(bookSale);
-        userRepository.save(user);
-
-        book.getSales().add(bookSale);
-        bookRepository.save(book);
-
-        return "redirect:/market/" + bookSale.getId();
+        return "redirect:/books/" + bookSale.getBook().getId();
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/delete/{id}")
-    public String delBookSale(Model model, @PathVariable("id") Long id){
-        Optional<BookSale> bookSale = marketRepository.findById(id);
+    public String delBookSale(Model model, @PathVariable("id") String id){
+        Long bookid = Long.parseLong(id);
+
+        Optional<BookSale> bookSale = marketRepository.findById(bookid);
 
         if(bookSale.isEmpty()){
             return "redirect:/market/main";
@@ -69,6 +81,7 @@ public class MarketController {
         return "market/del";
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/delete/{id}")
     public String delBookSale(@PathVariable("id") Long id){
         Optional<BookSale> bookSale = marketRepository.findById(id);
@@ -79,9 +92,30 @@ public class MarketController {
         return "redirect:/market/main";
     }
 
-    @PostMapping("/add-to-cart/{id}")
-    public String addToCart(@PathVariable("id") Long id) {
-        return "redirect:/";
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @GetMapping("/add-to-cart/{id}")
+    public String addToCart(Model model, @PathVariable("id") Long id){
+        Optional<BookSale> bookSale = marketRepository.findById(id);
+
+        if(bookSale.isEmpty()){
+            return "redirect:/market/main";
+        }
+
+        model.addAttribute("bookSale", bookSale.get());
+        return "market/tocart";
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping("/add-to-cart/{id}")
+    public String addToCart(@PathVariable("id") Long id, Principal principal) {
+        User user = userRepository.findByLogin(principal.getName());
+        Optional<BookSale> bookSale = marketRepository.findById(id);
+        if(bookSale.isPresent()){
+
+            user.getUserCarts().add(new UserCart(user, bookSale.get()));
+            userCartRepository.saveAll(user.getUserCarts());
+        }
+
+        return "redirect:/market/main";
+    }
 }

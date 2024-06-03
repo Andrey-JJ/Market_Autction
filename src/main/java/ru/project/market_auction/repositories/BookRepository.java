@@ -11,5 +11,7 @@ import ru.project.market_auction.models.books.Publisher;
 public interface BookRepository extends JpaRepository<Book, Long> {
     @Query("SELECT b FROM Book b WHERE b.title = :title AND b.publisher.name = :publisher AND b.publicationYear = :publicationYear")
     Book findByTitleAndPublisherAndPublicationYear(@Param("title") String title, @Param("publisher") String publisher, @Param("publicationYear") Integer publicationYear);
+
+    Book findByTitle(String title);
 }
 
