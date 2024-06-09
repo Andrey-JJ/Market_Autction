@@ -58,4 +58,10 @@ public class AuctionDetail {
     public void setBook(Book book) {
         this.book = book;
     }
+
+    public AuctionDetail(Auction auction, Integer position, Book book){
+        this.auction = auction;
+        this.positionNumber = position;
+        this.book = book;
+    }
 }

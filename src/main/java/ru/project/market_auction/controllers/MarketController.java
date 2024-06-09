@@ -7,6 +7,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.project.market_auction.models.books.Book;
 import ru.project.market_auction.models.books.Genre;
 import ru.project.market_auction.models.books.Publisher;
@@ -30,7 +31,7 @@ public class MarketController {
     @Autowired private UserRepository userRepository;
     @Autowired private UserCartRepository userCartRepository;
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/main")
     public String getAll(Model model){
         List<BookSale> all = (List<BookSale>) marketRepository.findAll();
@@ -38,7 +39,7 @@ public class MarketController {
         return "market/main";
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/new")
     public String addNewSale(Model model){
         List<Book> books = (List<Book>) bookRepository.findAll();
@@ -50,7 +51,7 @@ public class MarketController {
         return "market/add";
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/new")
     public String addNewSale(Model model, Principal principal, @RequestParam("bookTitle") String bookTitle, @RequestParam("price") BigDecimal price){
         Book book = bookRepository.findByTitle(bookTitle);
@@ -66,7 +67,7 @@ public class MarketController {
         return "redirect:/books/" + bookSale.getBook().getId();
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/delete/{id}")
     public String delBookSale(Model model, @PathVariable("id") String id){
         Long bookid = Long.parseLong(id);
@@ -81,41 +82,34 @@ public class MarketController {
         return "market/del";
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/delete/{id}")
     public String delBookSale(@PathVariable("id") Long id){
         Optional<BookSale> bookSale = marketRepository.findById(id);
 
         if(bookSale.isPresent()){
-            marketRepository.deleteById(id);
+            marketRepository.delete(bookSale.get());
         }
         return "redirect:/market/main";
     }
 
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @GetMapping("/add-to-cart/{id}")
-    public String addToCart(Model model, @PathVariable("id") Long id){
-        Optional<BookSale> bookSale = marketRepository.findById(id);
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping("/add_to_cart")
+    public String addToCart(@RequestParam("bookSaleId") Long bookSaleId, Principal principal, RedirectAttributes redirectAttributes){
+        User user = userRepository.findByLogin(principal.getName());
 
+        Optional<BookSale> bookSale = marketRepository.findById(bookSaleId);
         if(bookSale.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Объявление не было добавлено из-за ошибки");
             return "redirect:/market/main";
         }
 
-        model.addAttribute("bookSale", bookSale.get());
-        return "market/tocart";
-    }
-
-    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
-    @PostMapping("/add-to-cart/{id}")
-    public String addToCart(@PathVariable("id") Long id, Principal principal) {
-        User user = userRepository.findByLogin(principal.getName());
-        Optional<BookSale> bookSale = marketRepository.findById(id);
-        if(bookSale.isPresent()){
-
-            user.getUserCarts().add(new UserCart(user, bookSale.get()));
-            userCartRepository.saveAll(user.getUserCarts());
-        }
+        UserCart userCart = new UserCart();
+        userCart.setUser(user);
+        userCart.setBookSale(bookSale.get());
+        userCartRepository.save(userCart);
 
         return "redirect:/market/main";
     }
+
 }

@@ -11,7 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "user_cart")
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserCart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,5 +51,8 @@ public class UserCart {
     public UserCart(User user, BookSale bookSale){
         this.user = user;
         this.bookSale = bookSale;
+    }
+
+    public UserCart() {
     }
 }

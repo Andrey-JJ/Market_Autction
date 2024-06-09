@@ -12,21 +12,7 @@
     <th:block th:replace="main/header :: header"></th:block>
     <!--Часть main-->
     <main class="container mt-4">
-        <button type="button" class="btn btn-primary mb-3" id="createAuctionBtn">Создать аукцион</button>
-        <div id="auctionForm" style="display: none;" class="mb-5">
-            <form action="/createAuction" method="post">
-                <!-- Здесь добавьте поля формы для создания аукциона -->
-                <div class="mb-3">
-                    <label for="auctionType" class="form-label">Тип аукциона</label>
-                    <select class="form-select" id="auctionType" name="auctionType">
-                        <option value="">Выберите тип аукциона</option>
-                        <option th:each="type : ${auctionTypes}" th:text="${type}"></option>
-                    </select>
-                </div>
-                <!-- Другие поля формы -->
-                <button type="submit" class="btn btn-primary">Создать</button>
-            </form>
-        </div>
+        <a class="btn btn-primary mb-3" th:href="@{/auctions/new}">Создать аукцион</a>
         <div th:each="auction : ${auctions}" class="card mb-3">
             <div class="row">
                 <div class="col-auto" style="margin: 5px 0 5px 5px;">
@@ -56,7 +42,7 @@
                             <p style="margin: -5px 0;">
                                 <th:block th:each="detail, iterStat : ${auction.auctionDetails}">
                                     <!-- Получаем название книги из детали аукциона -->
-                                    <a th:href="@{'/auctions/' + ${auction.id}}">
+                                    <a th:href="@{/auctions/{id}(id=${auction.id})}">
                                         <span th:text="${detail.book.title}"></span>
                                         <span th:if="${not iterStat.last}">, </span>
                                     </a>
@@ -78,11 +64,11 @@
                             <!-- Пользователь, создавший аукцион -->
                             <p class="d-flex justify-content-between" style="margin: -5px 0;">
                                 <span th:text="${auction.user.login}"></span>
-                                <span th:if="${auction.auctionType == 'ult'}">
+                                <span th:if="${auction.auctionType == 'lb'}">
                                     Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
                                 </span>
-                                <span th:if="${auction.auctionType != 'ult'}">
-                                    Время: <span th:text="${auction.auctionDuration}"></span>
+                                <span th:if="${auction.auctionType == 'lt'}">
+                                    Оставшееся время: <span th:text="${auction.auctionDuration}"></span>
                                 </span>
                             </p>
                         </div>
@@ -96,20 +82,6 @@
         <th:block th:replace="main/footer :: footer"></th:block>
     </div>
     <!--Скрипты для страницы-->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const createAuctionBtn = document.getElementById("createAuctionBtn");
-            const auctionForm = document.getElementById("auctionForm");
-
-            createAuctionBtn.addEventListener("click", function() {
-                if (auctionForm.style.display === "none" || auctionForm.style.display === "") {
-                    auctionForm.style.display = "block";
-                } else {
-                    auctionForm.style.display = "none";
-                }
-            });
-        });
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>

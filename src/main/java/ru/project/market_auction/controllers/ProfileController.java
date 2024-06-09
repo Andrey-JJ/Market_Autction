@@ -58,18 +58,10 @@ public class ProfileController {
         return "profile/cart";
     }
 
-    @DeleteMapping("/cart/remove/{bookSaleId}")
-    public ResponseEntity<?> removeItemFromCart(@PathVariable("bookSaleId") Long bookSaleId, Principal principal) {
+    @PostMapping("/cart/delete")
+    public String getUserCart(@RequestParam("bookSaleId") Long bookSaleId, Principal principal) {
         User user = userRepository.findByLogin(principal.getName());
-        try {
-            userCartRepository.deleteAllByUserAndBookSale(user.getId(), bookSaleId);
-
-            // Возврат успешного статуса
-            return ResponseEntity.ok().build();
-        }
-        catch (Exception e){
-            e.printStackTrace();
-            return new ResponseEntity<>("Ошибка при удалении товара из корзины", HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        userCartRepository.deleteAllByUserAndBookSale(user.getId(), bookSaleId);
+        return "redirect:/profile/cart/" + principal.getName();
     }
 }

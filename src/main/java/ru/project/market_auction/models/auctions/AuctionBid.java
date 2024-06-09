@@ -70,4 +70,8 @@ public class AuctionBid {
     public void setBidTime(LocalDateTime bidTime) {
         this.bidTime = bidTime;
     }
+
+    /*public AuctionBid(Auction auction, User user, BigDecimal bidAmount, LocalDateTime bidTime){
+
+    }*/
 }

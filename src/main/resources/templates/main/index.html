@@ -127,12 +127,12 @@
                         <div class="col-auto" style="margin-left: -20px;">
                             <th:block th:if="${bookSale.user.login == #authentication.name}">
                                 <div class="row mt-5">
-                                    <!-- Кнопка "Купить" -->
+                                    <!-- Кнопка "Изменить" -->
                                     <button th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</button>
                                 </div>
                                 <div class="row">
-                                    <!-- Кнопка "В корзину" -->
-                                    <button th:href="@{/market/delete/{id}(id=${bookSale.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</button>
+                                    <!-- Кнопка "Удалить" -->
+                                    <button class="btn btn-primary mb-2" style="width: 99.7px;">В корзину</button>
                                 </div>
                             </th:block>
                             <th:block th:unless="${bookSale.user.login == #authentication.name}">
@@ -142,8 +142,10 @@
                                 </div>
                                 <div class="row">
                                     <!-- Кнопка "В корзину" -->
-                                    <form th:href="@{/market/add-to-cart/{id}(id=${bookSale.id})}" method="post">
-                                        <button type="submit" class="btn btn-success" style="width: 99.7px; margin-left: -12px;">В корзину</button>
+                                    <form th:action="@{/market/add_to_cart}" method="post">
+                                        <input type="hidden" name="bookSaleId" th:value="${bookSale.id}" />
+                                        <input type="hidden" name="_method" value="post" />
+                                        <button class="btn btn-success" style="width: 99.7px;" type="submit">В корзину</button>
                                     </form>
                                 </div>
                             </th:block>

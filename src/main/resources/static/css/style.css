@@ -84,10 +84,18 @@
 }
 
 .scrollable-list {
-            max-height: 200px;
-            overflow-y: auto;
-            border: 1px solid #ccc;
-            padding: 5px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+}
+
+.scrollable-list-books {
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки */
+    grid-gap: 10px; /* Отступы между элементами */
 }
 
 footer {

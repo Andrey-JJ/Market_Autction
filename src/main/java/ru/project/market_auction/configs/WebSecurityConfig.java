@@ -35,6 +35,7 @@ public class WebSecurityConfig{
                     .requestMatchers("/registration", "/change-password", "/", "/market/main", "/auctions/main").permitAll()
                     .requestMatchers("/books/**", "/genres/**", "/authors/**",
                             "/publishers/**", "/users/**", "/roles/**").hasRole("ADMIN")
+                    .requestMatchers("/books/*").hasRole("USER")
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .anyRequest().authenticated()
             )
