@@ -75,9 +75,11 @@
                                         <span th:text="'Продавец - ' + ${auction.user.login}"></span>
                                         <span th:if="${auction.auctionType == 'ult'}">
                                             Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
+                                            , Статус: <span th:text="${auction.status ? 'Завершен' : 'Не завершен'}"></span>
                                         </span>
                                         <span th:if="${auction.auctionType != 'ult'}">
                                             Время: <span th:text="${auction.auctionDuration}"></span>
+                                            , Статус: <span th:text="${auction.status ? 'Завершен' : 'Не завершен'}"></span>
                                         </span>
                                     </p>
                                 </div>
@@ -125,22 +127,12 @@
                             </div>
                         </div>
                         <div class="col-auto" style="margin-left: -20px;">
-                            <th:block th:if="${bookSale.user.login == #authentication.name}">
-                                <div class="row mt-5">
-                                    <!-- Кнопка "Изменить" -->
-                                    <button th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</button>
-                                </div>
-                                <div class="row">
-                                    <!-- Кнопка "Удалить" -->
-                                    <button class="btn btn-primary mb-2" style="width: 99.7px;">В корзину</button>
-                                </div>
-                            </th:block>
-                            <th:block th:unless="${bookSale.user.login == #authentication.name}">
-                                <div class="row mt-5">
+                            <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                <div class="row mt-1">
                                     <!-- Кнопка "Купить" -->
-                                    <button class="btn btn-primary mb-2" style="width: 99.7px;">Купить</button>
+                                    <a class="btn btn-primary mb-2" style="width: 99.7px;">Купить</a>
                                 </div>
-                                <div class="row">
+                                <div class="row mb-2">
                                     <!-- Кнопка "В корзину" -->
                                     <form th:action="@{/market/add_to_cart}" method="post">
                                         <input type="hidden" name="bookSaleId" th:value="${bookSale.id}" />
@@ -148,6 +140,40 @@
                                         <button class="btn btn-success" style="width: 99.7px;" type="submit">В корзину</button>
                                     </form>
                                 </div>
+                                <div class="row">
+                                    <!-- Кнопка "Изменить" -->
+                                    <a th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</a>
+                                </div>
+                                <div class="row">
+                                    <!-- Кнопка "Удалить" -->
+                                    <a th:href="@{/market/delete/{id}(id=${bookSale.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</a>
+                                </div>
+                            </th:block>
+                            <th:block th:unless="${#authorization.expression('hasRole(''ADMIN'')')}">
+                                <th:block th:if="${bookSale.user.login == #authentication.name}">
+                                    <div class="row mt-5">
+                                        <!-- Кнопка "Изменить" -->
+                                        <a th:href="@{/market/update/{id}(id=${bookSale.id})}" class="btn btn-warning mb-2" style="width: 99.7px;">Изменить</a>
+                                    </div>
+                                    <div class="row">
+                                        <!-- Кнопка "Удалить" -->
+                                        <a th:href="@{/market/delete/{id}(id=${bookSale.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</a>
+                                    </div>
+                                </th:block>
+                                <th:block th:unless="${bookSale.user.login == #authentication.name}">
+                                    <div class="row mt-5">
+                                        <!-- Кнопка "Купить" -->
+                                        <a class="btn btn-primary mb-2" style="width: 99.7px;">Купить</a>
+                                    </div>
+                                    <div class="row">
+                                        <!-- Кнопка "В корзину" -->
+                                        <form th:action="@{/market/add_to_cart}" method="post">
+                                            <input type="hidden" name="bookSaleId" th:value="${bookSale.id}" />
+                                            <input type="hidden" name="_method" value="post" />
+                                            <button class="btn btn-success" style="width: 99.7px;" type="submit">В корзину</button>
+                                        </form>
+                                    </div>
+                                </th:block>
                             </th:block>
                         </div>
                     </div>

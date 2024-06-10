@@ -34,6 +34,9 @@ public class Auction {
     @Column(name = "current_price")
     private BigDecimal currentPrice;
 
+    @Column(name = "is_ended")
+    private Boolean status;
+
     @OneToMany(mappedBy = "auction")
     private List<AuctionDetail> auctionDetails;
 
@@ -86,6 +89,14 @@ public class Auction {
 
     public void setCurrentPrice(BigDecimal currentPrice) {
         this.currentPrice = currentPrice;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 
     public List<AuctionDetail> getAuctionDetails() {

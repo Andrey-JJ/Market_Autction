@@ -33,9 +33,8 @@ public class WebSecurityConfig{
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests((requests) -> requests
                     .requestMatchers("/registration", "/change-password", "/", "/market/main", "/auctions/main").permitAll()
-                    .requestMatchers("/books/**", "/genres/**", "/authors/**",
+                    .requestMatchers("/genres/**", "/authors/**",
                             "/publishers/**", "/users/**", "/roles/**").hasRole("ADMIN")
-                    .requestMatchers("/books/*").hasRole("USER")
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .anyRequest().authenticated()
             )

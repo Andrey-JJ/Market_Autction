@@ -29,55 +29,66 @@
                     <h5>Кол-во ставок: <span th:text="${auction.auctionBids.size()}"></span></h5>
                 </div>
                 <div class="col-auto">
-                    <h5>
-                        <th:block th:if="${auction.auctionType == 'lb'}">
-                            Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
-                        </th:block>
-                        <th:block th:unless="${auction.auctionType == 'lb'}">
-                            <th:block th:if="${auction.auctionBids.size() == 0}">
-                                Оставшееся время: <span th:text="${auction.auctionDuration}"></span>
+                    <div class="row mb-3">
+                        <h5>
+                            <th:block th:if="${auction.auctionType == 'lb'}">
+                                Время:
+                                <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
                             </th:block>
-                            <th:block th:if="${auction.auctionBids.size() != 0}">
-                                Оставшееся время: <span id="remainingTime" th:text="${auction.auctionDuration}"></span>
-                                <script>
-                                    function startCountdown(duration) {
-                                        var countdownElement = document.getElementById("remainingTime");
+                            <th:block th:unless="${auction.auctionType == 'lb'}">
+                                <th:block th:if="${auction.auctionBids.size() == 0}">
+                                    Оставшееся время: <span th:text="${auction.auctionDuration}"></span>
+                                </th:block>
+                                <th:block th:if="${auction.auctionBids.size() != 0}">
+                                    Оставшееся время: <span id="remainingTime" th:text="${auction.auctionDuration}"></span>
+                                    <script>
+                                        function startCountdown(duration) {
+                                            var countdownElement = document.getElementById("remainingTime");
 
-                                        function updateCountdown() {
-                                            var hours = Math.floor(duration / 3600);
-                                            var minutes = Math.floor((duration % 3600) / 60);
-                                            var seconds = duration % 60;
+                                            function updateCountdown() {
+                                                var hours = Math.floor(duration / 3600);
+                                                var minutes = Math.floor((duration % 3600) / 60);
+                                                var seconds = duration % 60;
 
-                                            if (duration <= 0) {
-                                                countdownElement.textContent = "Аукцион завершен!";
-                                                clearInterval(interval);
-                                            } else {
-                                                countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
+                                                if (duration <= 0) {
+                                                    countdownElement.textContent = "Аукцион завершен!";
+                                                    clearInterval(interval);
+                                                } else {
+                                                    countdownElement.textContent = hours + ":" + minutes + ":" + seconds;
+                                                }
+
+                                                duration--;
                                             }
 
-                                            duration--;
+                                            updateCountdown();
+                                            var interval = setInterval(updateCountdown, 1000);
                                         }
 
-                                        updateCountdown();
-                                        var interval = setInterval(updateCountdown, 1000);
-                                    }
+                                        function parseTimeString(timeString) {
+                                            var parts = timeString.split(':');
+                                            var hours = parseInt(parts[0], 10);
+                                            var minutes = parseInt(parts[1], 10);
+                                            return (hours * 3600) + (minutes * 60);
+                                        }
 
-                                    function parseTimeString(timeString) {
-                                        var parts = timeString.split(':');
-                                        var hours = parseInt(parts[0], 10);
-                                        var minutes = parseInt(parts[1], 10);
-                                        return (hours * 3600) + (minutes * 60);
-                                    }
-
-                                    window.onload = function() {
-                                        var timeString = document.getElementById("remainingTime").textContent.trim();
-                                        var duration = parseTimeString(timeString);
-                                        startCountdown(duration);
-                                    }
-                                </script>
+                                        window.onload = function() {
+                                            var timeString = document.getElementById("remainingTime").textContent.trim();
+                                            var duration = parseTimeString(timeString);
+                                            startCountdown(duration);
+                                        }
+                                    </script>
+                                </th:block>
                             </th:block>
-                        </th:block>
-                    </h5>
+                        </h5>
+                    </div>
+                    <div class="row mb-3">
+                        <h5>
+                            <th:block>
+                                Статус:
+                                <span th:text="${auction.status ? 'Завершен' : 'Не завершен'}"></span>
+                            </th:block>
+                        </h5>
+                    </div>
                 </div>
             </div>
             <!-- Блок для кнопок -->
@@ -86,6 +97,11 @@
                     <!--<p th:text="${message}" class="text-success"></p>-->
                     <a th:href="@{/auctions/update/{id}(id=${auction.id})}" class="btn btn-warning">Редактировать</a>
                     <a th:href="@{/auctions/delete/{id}(id=${auction.id})}" class="btn btn-danger">Удалить</a>
+                    <th:block th:if="${!auction.status}">
+                        <form th:action="@{/auctions/close/{id}(id=${auction.id})}" method="post" class="mt-3">
+                            <button type="submit" class="btn btn-success">Завершить</button>
+                        </form>
+                    </th:block>
                 </div>
             </div>
             <!-- Блок детализации -->

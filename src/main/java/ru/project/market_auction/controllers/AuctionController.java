@@ -115,7 +115,7 @@ public class AuctionController {
     }
 
     @PostMapping("/update")
-    public String editAuction(@ModelAttribute Auction auction){
+    public String editAuction(@ModelAttribute Auction auction, Principal principal){
         if(auction.getAuctionBids().isEmpty()){
             auction.setCurrentPrice(auction.getMinimumPrice());
         }
@@ -149,6 +149,21 @@ public class AuctionController {
             auctionRepository.delete(auction.get());
         }
         return "redirect:/auctions/main";
+    }
+
+    @PostMapping("/close/{id}")
+    public String closeAuction(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
+        Optional<Auction> auction = auctionRepository.findById(id);
+
+        if(auction.isPresent()){
+            auction.get().setStatus(true);
+            auctionRepository.save(auction.get());
+        }
+        else {
+            redirectAttributes.addFlashAttribute("error", "При завершении аукциона произошла ошибка");
+        }
+
+        return "redirect:/auctions/" + auction.get().getId();
     }
 
     @PostMapping("/add_bid")
