@@ -65,11 +65,11 @@
                             <p class="d-flex justify-content-between" style="margin: -5px 0;">
                                 <span th:text="${auction.user.login}"></span>
                                 <span th:if="${auction.auctionType == 'lb'}">
-                                    Время: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
+                                    Длительность: <img src="/images/logos/logo-infinity.png" alt="Infiniti Logo" style="width: 30px; height: 30px;"/>
                                     , Статус: <span th:text="${auction.status ? 'Завершен' : 'Не завершен'}"></span>
                                 </span>
                                 <span th:if="${auction.auctionType == 'lt'}">
-                                    Оставшееся время: <span th:text="${auction.auctionDuration}"></span>
+                                    Длительность: <span th:text="${auction.auctionDuration}"></span>
                                     , Статус: <span th:text="${auction.status ? 'Завершен' : 'Не завершен'}"></span>
                                 </span>
                             </p>

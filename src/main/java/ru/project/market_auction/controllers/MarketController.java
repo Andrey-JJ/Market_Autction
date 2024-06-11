@@ -95,21 +95,43 @@ public class MarketController {
 
     //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @PostMapping("/add_to_cart")
-    public String addToCart(@RequestParam("bookSaleId") Long bookSaleId, Principal principal, RedirectAttributes redirectAttributes){
+    public String addToCart(@RequestParam("bookSaleId") Long bookSaleId, @RequestParam("page") String page, Principal principal, RedirectAttributes redirectAttributes){
+        String returnPage = "";
+
         User user = userRepository.findByLogin(principal.getName());
 
         Optional<BookSale> bookSale = marketRepository.findById(bookSaleId);
         if(bookSale.isEmpty()){
             redirectAttributes.addFlashAttribute("error", "Объявление не было добавлено из-за ошибки");
-            return "redirect:/market/main";
+            returnPage = getReturnPage(page, bookSale.get(), principal.getName());
         }
+
+        returnPage = getReturnPage(page, bookSale.get(), principal.getName());
 
         UserCart userCart = new UserCart();
         userCart.setUser(user);
         userCart.setBookSale(bookSale.get());
         userCartRepository.save(userCart);
 
-        return "redirect:/market/main";
+        return returnPage;
     }
 
+    private String getReturnPage(String page, BookSale bookSale, String user){
+        String text = "";
+        switch (page){
+            case "mainPage":
+                text = "redirect:/";
+                break;
+            case "marketPage":
+                text = "redirect:/market/main";
+                break;
+            case "bookPage":
+                text = "redirect:/books/" + bookSale.getBook().getId();
+                break;
+            case "cartPage":
+                text = "redirect:/profile/cart/" + bookSale.getBook().getId();
+                break;
+        }
+        return text;
+    }
 }

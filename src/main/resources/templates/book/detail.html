@@ -52,12 +52,27 @@
                         <td th:text="${sale.user.login}"></td>
                         <td th:text="${sale.price}"></td>
                         <td>
-                            <a href="#" class="btn btn-primary d-inline">Купить</a>
-                            <div class="d-inline">
-                                <a th:href="@{/market/add-to-cart/{id}(id=${sale.id})}" type="submit" class="btn btn-success">В корзину</a>
-                            </div>
-                            <div class="d-inline">
-                                <a th:href="@{/market/delete/{id}(id=${sale.id})}" type="submit" class="btn btn-danger">Удалить</a>
+                            <!--<a href="#" class="btn btn-primary d-inline">Купить</a>-->
+                            <div class="d-flex align-items-center">
+                                <div class="d-inline">
+                                    <form th:action="@{/market/add_to_cart}" method="post">
+                                        <input type="hidden" name="bookSaleId" th:value="${sale.id}" />
+                                        <input type="hidden" name="_method" value="post" />
+                                        <input type="hidden" name="page" value="cartPage" />
+                                        <button class="btn btn-primary" style="width: 99.7px;" type="submit">Купить</button>
+                                    </form>
+                                </div>
+                                <div class="d-inline ms-2">
+                                    <form th:action="@{/market/add_to_cart}" method="post">
+                                        <input type="hidden" name="bookSaleId" th:value="${sale.id}" />
+                                        <input type="hidden" name="_method" value="post" />
+                                        <input type="hidden" name="page" value="bookPage" />
+                                        <button class="btn btn-success" style="width: 99.7px;" type="submit">В корзину</button>
+                                    </form>
+                                </div>
+                                <div class="d-inline ms-2">
+                                    <a th:href="@{/market/delete/{id}(id=${sale.id})}" type="submit" class="btn btn-danger">Удалить</a>
+                                </div>
                             </div>
                         </td>
                     </tr>
@@ -70,7 +85,7 @@
                     <thead>
                     <tr>
                         <th>Пользователь</th>
-                        <th>Время</th>
+                        <th>Длительность</th>
                         <th>Мин. Цена</th>
                         <th>Тек. Цена</th>
                         <th></th>
@@ -90,7 +105,7 @@
                         <td th:text="${ad.auction.minimumPrice}"></td>
                         <td th:text="${ad.auction.currentPrice}"></td>
                         <td>
-                            <a th:href="@{/auctions/{id}(id=${book.id})}" class="btn btn-success">Подробнее</a>
+                            <a th:href="@{/auctions/{id}(id=${ad.auction.id})}" class="btn btn-success">Подробнее</a>
                         </td>
                     </tr>
                     </tbody>

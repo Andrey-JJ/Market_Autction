@@ -28,6 +28,9 @@ public class Auction {
     @Column(name = "auction_duration")
     private LocalTime auctionDuration;
 
+    @Column(name = "auction_cduration")
+    private LocalTime auctionCDuration;
+
     @Column(name = "minimum_price")
     private BigDecimal minimumPrice;
 
@@ -36,6 +39,12 @@ public class Auction {
 
     @Column(name = "is_ended")
     private Boolean status;
+
+    @Column(name = "beg_time")
+    private String begTime;
+
+    @Column(name = "end_time")
+    private String endTime;
 
     @OneToMany(mappedBy = "auction")
     private List<AuctionDetail> auctionDetails;
@@ -73,6 +82,14 @@ public class Auction {
 
     public void setAuctionDuration(LocalTime auctionDuration) {
         this.auctionDuration = auctionDuration;
+    }
+
+    public LocalTime getAuctionCDuration() {
+        return auctionCDuration;
+    }
+
+    public void setAuctionCDuration(LocalTime auctionCDuration) {
+        this.auctionCDuration = auctionCDuration;
     }
 
     public BigDecimal getMinimumPrice() {
@@ -113,6 +130,22 @@ public class Auction {
 
     public void setAuctionBids(List<AuctionBid> auctionBids) {
         this.auctionBids = auctionBids;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getBegTime() {
+        return begTime;
+    }
+
+    public void setBegTime(String begTime) {
+        this.begTime = begTime;
     }
 
     public Auction(){

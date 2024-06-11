@@ -18,6 +18,7 @@ import ru.project.market_auction.repositories.*;
 import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -44,6 +45,7 @@ public class AuctionController {
         if (auction.isEmpty()){
             return "redirect:/auctions/main";
         }
+
         model.addAttribute("auction", auction.get());
         return "auction/detail";
     }
@@ -80,8 +82,14 @@ public class AuctionController {
         }
 
         auction.setAuctionDuration(auctionDTO.getDuration());
+        auction.setAuctionCDuration(auctionDTO.getDuration());
         auction.setMinimumPrice(auctionDTO.getStartPrice());
         auction.setCurrentPrice(auctionDTO.getStartPrice());
+        auction.setStatus(false);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+        String time = LocalDateTime.now().format(formatter);
+        auction.setBegTime(time);
 
         auctionRepository.save(auction);
 
@@ -107,10 +115,7 @@ public class AuctionController {
             return "redirect:/auctions/main";
         }
 
-        //List<Book> books = (List<Book>) bookRepository.findAll();
-
         model.addAttribute("auction", auction.get());
-        //model.addAttribute("books", books);
         return "auction/edit";
     }
 
@@ -154,9 +159,11 @@ public class AuctionController {
     @PostMapping("/close/{id}")
     public String closeAuction(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Auction> auction = auctionRepository.findById(id);
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         if(auction.isPresent()){
             auction.get().setStatus(true);
+            String time = LocalDateTime.now().format(formatter);
+            auction.get().setEndTime(time);
             auctionRepository.save(auction.get());
         }
         else {
