@@ -196,6 +196,20 @@
                     </div>
                 </div>
             </div>
+            <!-- Пагинация -->
+            <!--<nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${booksPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/books/main(page=${currentPage - 1}, size=${pageSize})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, booksPage.totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/books/main(page=${i}, size=${pageSize})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${booksPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/books/main(page=${currentPage + 1}, size=${pageSize})}">Next</a>
+                    </li>
+                </ul>
+            </nav>-->
         </div>
     </main>
     <!--Часть footer-->

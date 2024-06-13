@@ -15,7 +15,7 @@
     <div class="container mt-4" id="bookSalesContainer">
         <a th:href="@{/market/new}" class="btn btn-success mb-3">Создать объявление</a>
         <div class="row">
-            <div th:each="bookSale, iterStat : ${bookSales}" class="col-md-6 mb-3"><!--th:if="${iterStat.index &lt; 6}"-->
+            <div th:each="bookSale, iterStat : ${bookSales.getContent()}" class="col-md-6 mb-3"><!--th:if="${iterStat.index &lt; 6}"-->
                 <div class="card">
                     <div class="row no-gutters">
                         <div class="col-auto">
@@ -114,39 +114,19 @@
                 </div>
             </div>
         </div>
-        <button id="loadMoreBtn" class="btn btn-primary" onclick="loadMoreBookSales()">Показать еще</button>
-        <script>
-            var currentPage = 0; // Текущая страница
-            var itemsPerPage = 6; // Количество записей на странице
-
-            function loadMoreBookSales() {
-                // Получаем все записи
-                var bookSales = document.querySelectorAll('.row .col-md-6');
-
-                // Показываем следующие записи
-                for (var i = currentPage * itemsPerPage; i < (currentPage + 1) * itemsPerPage; i++) {
-                    if (bookSales[i]) {
-                        bookSales[i].style.display = 'block';
-                    }
-                }
-
-                // Увеличиваем номер текущей страницы
-                currentPage++;
-
-                // Проверяем, нужно ли скрывать кнопку
-                if ((currentPage + 1) * itemsPerPage >= bookSales.length) {
-                    var loadMoreBtn = document.getElementById('loadMoreBtn');
-                    if (loadMoreBtn) {
-                        loadMoreBtn.style.display = 'none';
-                    }
-                }
-            }
-
-            // Показываем первые записи при загрузке страницы
-            window.onload = function() {
-                loadMoreBookSales();
-            };
-        </script>
+        <nav class="d-flex justify-content-center">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${bookSales.hasPrevious()} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/market/main(page=${currentPage - 1}, size=${pageSize})}">Previous</a>
+                </li>
+                <li class="page-item" th:each="i : ${#numbers.sequence(0, bookSales.totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                    <a class="page-link" th:href="@{/market/main(page=${i}, size=${pageSize})}" th:text="${i + 1}">1</a>
+                </li>
+                <li class="page-item" th:classappend="${bookSales.hasNext()} ? '' : 'disabled'">
+                    <a class="page-link" th:href="@{/market/main(page=${currentPage + 1}, size=${pageSize})}">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </main>
 <!-- Часть footer -->

@@ -1,6 +1,10 @@
 package ru.project.market_auction.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +29,22 @@ public class BookController {
     @Autowired private GenreRepository genreRepository;
     @Autowired private AuthorBookRepository authorBookRepository;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/main")
-    public String getAllBooks(Model model){
-        List<Book> books = (List<Book>) bookRepository.findAll();
-        model.addAttribute("books", books);
+    public String getAllBooks(Model model,
+                              @RequestParam(defaultValue = "0") int page,
+                              @RequestParam(defaultValue = "8") int size){
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Book> booksPage = bookRepository.findAll(pageable);
+        //List<Book> books = (List<Book>) bookRepository.findAll();
+        model.addAttribute("booksPage", booksPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
         return "book/main";
     }
 
+    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/{id}")
     public String getBook(Model model, @PathVariable("id") Long id){
         Optional<Book> book = bookRepository.findById(id);
@@ -42,6 +55,7 @@ public class BookController {
         return "book/detail";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/new")
     public String addBook(Model model){
         List<Author> authors = (List<Author>) authorRepository.findAll();
@@ -54,6 +68,7 @@ public class BookController {
         return "book/add";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/new")
     public String addBook(@ModelAttribute Book book,
                           @RequestParam("selectedPublisher") String publisher,
@@ -95,6 +110,7 @@ public class BookController {
         return "redirect:/books/main";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/update/{id}")
     public String updateBook(@PathVariable("id") Long id, Model model){
         Optional<Book> book = bookRepository.findById(id);
@@ -116,6 +132,7 @@ public class BookController {
         return "book/edit";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/update")
     public String editBook(@ModelAttribute Book book,
                            @RequestParam("selectedPublisher") String publisher,
@@ -158,6 +175,7 @@ public class BookController {
         return "redirect:/books/details/" + book.getId(); // Перенаправление на страницу деталей книги
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
     public String delBook(Model model, @PathVariable("id") Long id){
         Optional<Book> book = bookRepository.findById(id);
@@ -168,6 +186,7 @@ public class BookController {
         return "book/del";
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete/{id}")
     public String delBook(@PathVariable("id") Long id){
         Optional<Book> book = bookRepository.findById(id);

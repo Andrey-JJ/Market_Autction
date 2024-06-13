@@ -29,7 +29,7 @@
                         </div>
                         <!-- Добавляем поле для ошибки аутентификации -->
                         <div th:if="${param.error}" class="alert alert-danger" role="alert">
-                            <p th:text="${error}"> Неверное логин пользователя или пароль.</p>
+                            <p>Были использованы неверно указанное имя пользователя или пароль!</p>
                         </div>
                         <button type="submit" class="btn btn-primary">Вход</button>
                     </form>

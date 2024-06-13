@@ -39,22 +39,31 @@ public class AuthorizationController {
     }
 
     @PostMapping("/registration")
-    public String processRegistrationForm(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("user")User user, Model model){
-        try{
-            Role role = roleRepository.findByName("USER");
-            user.setRole(role);
+    public String processRegistrationForm(HttpServletRequest request, HttpServletResponse response, @ModelAttribute("user")User user, Model model, RedirectAttributes redirectAttributes){
+        User testUser1 = userRepository.findByLogin(user.getLogin());
+        User testUser2 = userRepository.findByEmail(user.getEmail());
+        if(testUser1 == null || testUser2 == null){
+            try{
+                Role role = roleRepository.findByName("USER");
+                user.setRole(role);
 
-            userRepository.save(user);
+                userRepository.save(user);
 
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
-            SecurityContext securityContext = SecurityContextHolder.getContext();
-            HttpSession session = request.getSession(true);
-            session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,securityContext);
+                Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getLogin(), user.getPassword()));
+                SecurityContext securityContext = SecurityContextHolder.getContext();
+                HttpSession session = request.getSession(true);
+                session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,securityContext);
 
-            return "redirect:/";
+                return "redirect:/login";
+            }
+            catch (Exception e){
+                redirectAttributes.addFlashAttribute("error", "Ошибка при создании пользователя!");
+                return "redirect:/registration";
+            }
         }
-        catch (Exception e){
-            return "redirect:/registration?error";
+        else {
+            redirectAttributes.addFlashAttribute("error", "Пользователь с таким логином или почтой уже существует!");
+            return "redirect:/registration";
         }
     }
 

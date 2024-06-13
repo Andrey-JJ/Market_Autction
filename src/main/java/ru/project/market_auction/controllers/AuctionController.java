@@ -1,5 +1,6 @@
 package ru.project.market_auction.controllers;
 
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import ru.project.market_auction.models.books.Book;
 import ru.project.market_auction.models.sales.BookSale;
 import ru.project.market_auction.models.users.User;
 import ru.project.market_auction.repositories.*;
+import ru.project.market_auction.services.FileService;
 
 import java.math.BigDecimal;
 import java.security.Principal;
@@ -34,8 +36,12 @@ public class AuctionController {
 
     @GetMapping("/main")
     public String getAllAuctions(Model model){
-        List<Auction> auctions = (List<Auction>) auctionRepository.findAll();
-        model.addAttribute("auctions", auctions);
+        /*List<Auction> auctions = (List<Auction>) auctionRepository.findAll();
+        model.addAttribute("auctions", auctions);*/
+        List<Auction> currentAuctions = auctionRepository.findByStatus(false); //не завершенные
+        List<Auction> closeAuctions = auctionRepository.findByStatus(true); //завершенные
+        model.addAttribute("currentAuctions", currentAuctions);
+        model.addAttribute("closeAuctions", closeAuctions);
         return "auction/main";
     }
 
@@ -204,5 +210,16 @@ public class AuctionController {
 
         auctionBidRepository.save(bid);
         return "redirect:/auctions/" + auction.get().getId();
+    }
+
+    @PostMapping("/results/{id}")
+    public void addBidToAuction(HttpServletResponse response, @PathVariable("id") Long id) throws Exception{
+        Optional<Auction> auction = auctionRepository.findById(id);
+        if (auction.isEmpty()){
+            response.sendRedirect("/auctions/main");
+            return;
+        }
+
+        FileService.getAuctionResults(response, auction.get());
     }
 }

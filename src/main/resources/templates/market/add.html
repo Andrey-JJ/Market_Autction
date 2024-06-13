@@ -25,7 +25,8 @@
                             th:data-genre="${book.genre.name}"
                             th:data-publisher="${book.publisher.name}"
                             th:data-publicationyear="${book.publicationYear}"
-                            th:data-pagecount="${book.pageCount}"></option>
+                            th:data-pagecount="${book.pageCount}"
+                            th:id="${book.id}"></option>
                 </datalist>
             </div>
 
@@ -84,13 +85,8 @@
             }
         });
     });
-</script>
-<script>
-    $(document).ready(function() {
-        $("#toggleForm").on("click", function() {
-            $("#searchForm").toggle();
-        });
 
+    $(document).ready(function() {
         $("#genre, #publisher, #publicationYear, #pageCount").on("input", function() {
             updateBookTitles();
         });
@@ -101,18 +97,15 @@
             const publicationYear = $('#publicationYear').val();
             const pageCount = $('#pageCount').val();
 
-            // Получаем изначальный список книг из глобальной переменной или запрашиваем его с сервера
-            var bookOptions = []; // Здесь должен быть ваш массив с данными книг
-
             // Очищаем текущий datalist
             $('#bookTitles').empty();
 
             // Фильтруем и добавляем отфильтрованные опции обратно в datalist
-            bookOptions.forEach(function(book) {
-                const bookGenre = book.genre.name.toLowerCase();
-                const bookPublisher = book.publisher.name.toLowerCase();
-                const bookPublicationYear = book.publicationYear;
-                const bookPageCount = book.pageCount;
+            $('option').each(function() {
+                const bookGenre = $(this).data('genre').toLowerCase();
+                const bookPublisher = $(this).data('publisher').toLowerCase();
+                const bookPublicationYear = $(this).data('publicationyear');
+                const bookPageCount = $(this).data('pagecount');
 
                 const matchGenre = !genre || bookGenre.includes(genre);
                 const matchPublisher = !publisher || bookPublisher.includes(publisher);
@@ -120,11 +113,7 @@
                 const matchPageCount = !pageCount || bookPageCount == pageCount;
 
                 if (matchGenre && matchPublisher && matchYear && matchPageCount) {
-                    $('#bookTitles').append(`<option value="${book.title}"
-                                              data-genre="${book.genre.name}"
-                                              data-publisher="${book.publisher.name}"
-                                              data-publicationyear="${bookPublicationYear}"
-                                              data-pagecount="${bookPageCount}">${book.title}</option>`);
+                    $('#bookTitles').append($(this).clone());
                 }
             });
         }

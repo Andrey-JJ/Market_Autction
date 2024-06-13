@@ -11,4 +11,5 @@ import java.util.List;
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findByAuctionTypeAndStatus(String auctionType, Boolean status);
     List<Auction> findByUserAndStatus(User user, Boolean status);
+    List<Auction> findByStatus(Boolean status);
 }

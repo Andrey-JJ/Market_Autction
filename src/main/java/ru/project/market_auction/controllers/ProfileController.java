@@ -1,5 +1,8 @@
 package ru.project.market_auction.controllers;
 
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.BaseFont;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +15,18 @@ import ru.project.market_auction.repositories.AuctionRepository;
 import ru.project.market_auction.repositories.BookSaleRepository;
 import ru.project.market_auction.repositories.UserCartRepository;
 import ru.project.market_auction.repositories.UserRepository;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.security.Principal;
-import java.util.HashMap;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import ru.project.market_auction.services.FileService;
 
 @Controller
 @RequestMapping("/profile")
@@ -102,67 +111,23 @@ public class ProfileController {
         return "redirect:/profile/cart/" + principal.getName();
     }
 
-    /*@PostMapping("/cart/checkout")
-    public ResponseEntity<byte[]> checkoutCart(@RequestParam("selectedItems") List<Long> selectedItems, Principal principal) throws IOException {
-        User user = userRepository.findByLogin(principal.getName());
-        List<UserCart> userCarts = user.getUserCarts();
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        try (PDDocument document = new PDDocument()) {
-            PDPage page = new PDPage();
-            document.addPage(page);
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                InputStream fontStream = getClass().getResourceAsStream("/static/fonts/arial.ttf");
-                PDType0Font font = PDType0Font.load(document, fontStream);
-
-                contentStream.setFont(font, 12);
-                contentStream.beginText();
-                contentStream.newLineAtOffset(50, 750);
-                contentStream.showText("Корзина пользователя");
-                contentStream.endText();
-
-                contentStream.setFont(font, 10);
-                int yPosition = 730;
-                int index = 1;
-                BigDecimal totalSum = BigDecimal.ZERO;
-
-                for (Long bookSaleId : selectedItems) {
-                    Optional<BookSale> bookSaleOpt = marketRepository.findById(bookSaleId);
-                    if (bookSaleOpt.isPresent()) {
-                        BookSale bookSale = bookSaleOpt.get();
-                        String title = bookSale.getBook().getTitle();
-                        String seller = bookSale.getUser().getLogin();
-                        int quantity = (int) userCarts.stream().filter(cart -> cart.getBookSale().getId().equals(bookSaleId)).count();
-                        BigDecimal price = bookSale.getPrice();
-                        BigDecimal total = price.multiply(BigDecimal.valueOf(quantity));
-                        totalSum = totalSum.add(total);
-
-                        contentStream.beginText();
-                        contentStream.newLineAtOffset(50, yPosition);
-                        contentStream.showText(String.format("%d. %s, Продавец: %s, Кол-во: %d, Цена: %s, Всего: %s",
-                                index, title, seller, quantity, price.toString(), total.toString()));
-                        contentStream.endText();
-                        yPosition -= 20;
-                        index++;
-                    }
-                }
-
-                contentStream.beginText();
-                contentStream.newLineAtOffset(50, yPosition - 20);
-                contentStream.showText("Итоговая сумма: " + totalSum.toString() + " руб.");
-                contentStream.endText();
-            }
-            document.save(byteArrayOutputStream);
+    @PostMapping("/cart/checkout")
+    public void checkout(HttpServletResponse response, @RequestParam("selectedItems") List<Long> selectedItemIds,
+                         Principal principal) throws Exception {
+        Optional<User> user = userRepository.findByLoginOrEmail(principal.getName());
+        if (user.isEmpty()) {
+            response.sendRedirect("/");
+            return;
         }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=checkout.pdf");
+        // Получаем карту из записей
+        Map<BookSale, Integer> bookSaleCountMap = new HashMap<>();
+        List<UserCart> findedItems = userCartRepository.findAllByIdsAndUser(selectedItemIds, user.get());
+        for (UserCart userCart : findedItems) {
+            BookSale bookSale = userCart.getBookSale();
+            bookSaleCountMap.put(bookSale, bookSaleCountMap.getOrDefault(bookSale, 0) + 1);
+        }
 
-        return ResponseEntity
-                .ok()
-                .headers(headers)
-                .body(byteArrayOutputStream.toByteArray());
-    }*/
-
-
+        FileService.getCartCheckout(response, bookSaleCountMap, user.get());
+    }
 }

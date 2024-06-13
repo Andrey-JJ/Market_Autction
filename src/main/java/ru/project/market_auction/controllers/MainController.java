@@ -26,7 +26,7 @@ public class MainController {
     @GetMapping("/")
     public String home(Model model) {
 
-        List<Auction> auctions = (List<Auction>) auctionRepository.findAll();
+        List<Auction> auctions = auctionRepository.findByStatus(false);
         List<BookSale> bookSales = (List<BookSale>) bookSaleRepository.findAll();
 
         model.addAttribute("auctions", auctions);
@@ -34,6 +34,4 @@ public class MainController {
 
         return "main/index";
     }
-
-
 }

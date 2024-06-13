@@ -1,6 +1,9 @@
 package ru.project.market_auction.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -33,9 +36,16 @@ public class MarketController {
 
     //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/main")
-    public String getAll(Model model){
-        List<BookSale> all = (List<BookSale>) marketRepository.findAll();
-        model.addAttribute("bookSales", all);
+    public String getAll(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "10") int size){
+        Pageable pageable = PageRequest.of(page, size);
+        Page<BookSale> bookSales = marketRepository.findAll(pageable);
+
+        //List<BookSale> all = (List<BookSale>) marketRepository.findAll();
+        model.addAttribute("bookSales", bookSales);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("pageSize", size);
         return "market/main";
     }
 

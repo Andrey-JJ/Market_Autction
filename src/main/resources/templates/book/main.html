@@ -29,7 +29,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="book : ${books}">
+                <tr th:each="book : ${booksPage.getContent()}">
                     <td>
                         <div class="card mb-4 border-0">
                             <img th:src="@{/images/books/{imagePath}(imagePath=${book.image})}" class="card-img mx-auto" style="width: 190px; height: 300px; object-fit: cover;" alt="Book Cover">
@@ -58,6 +58,19 @@
                 </tr>
                 </tbody>
             </table>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item" th:classappend="${booksPage.hasPrevious()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/books/main(page=${currentPage - 1}, size=${pageSize})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, booksPage.totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">
+                        <a class="page-link" th:href="@{/books/main(page=${i}, size=${pageSize})}" th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${booksPage.hasNext()} ? '' : 'disabled'">
+                        <a class="page-link" th:href="@{/books/main(page=${currentPage + 1}, size=${pageSize})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </main>
     <!-- Часть footer -->

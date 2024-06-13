@@ -17,77 +17,81 @@
         <div class="cart-container row">
             <!-- Левый столбец: список объявлений -->
             <div class="cart-items col-md-8">
-                <form id="checkoutForm" action="/profile/cart/checkout" method="post">
-                    <div th:each="entry : ${bookSaleCountMap}" class="card mb-3 mt-4">
-                        <div class="row g-0">
-                            <div class="col-auto d-flex align-items-center">
-                                <div class="form-check" style="margin: -10px 10px 0 10px;">
-                                    <input class="form-check-input cart-item-check" type="checkbox"
-                                           th:name="selectedItems" th:value="${entry.key.id}"
-                                           th:data-price="${entry.key.price}" th:data-quantity="${entry.value}"
-                                           onchange="calculateSelectedSum()">
-                                </div>
-                                <a th:href="@{/books/{id}(id=${entry.key.book.id})}" style="margin: 3px 0;">
-                                    <img class="img-fluid card-img mx-auto" style="width: 140px; height: 215px; object-fit: cover;"
-                                         th:src="@{/images/books/{imagePath}(imagePath=${entry.key.book.image})}" alt="Book Image">
-                                </a>
+                <div th:each="entry : ${bookSaleCountMap}" class="card mb-3 mt-4">
+                    <div class="row g-0">
+                        <div class="col-auto d-flex align-items-center">
+                            <div class="form-check" style="margin: -10px 10px 0 10px;">
+                                <input class="form-check-input cart-item-check" type="checkbox"
+                                       th:value="${entry.key.id}"
+                                       th:data-price="${entry.key.price}" th:data-quantity="${entry.value}"
+                                       onchange="calculateSelectedSum(); syncHiddenCheckbox(this);">
                             </div>
-                            <div class="col">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <p style="margin: -5px 0;">
-                                            <a th:href="@{/books/{id}(id=${entry.key.book.id})}">
-                                                <span th:text="${entry.key.book.title}"></span>
-                                            </a>
-                                        </p>
+                            <a th:href="@{/books/{id}(id=${entry.key.book.id})}" style="margin: 3px 0;">
+                                <img class="img-fluid card-img mx-auto" style="width: 140px; height: 215px; object-fit: cover;"
+                                     th:src="@{/images/books/{imagePath}(imagePath=${entry.key.book.image})}" alt="Book Image">
+                            </a>
+                        </div>
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="row">
+                                    <p style="margin: -5px 0;">
+                                        <a th:href="@{/books/{id}(id=${entry.key.book.id})}">
+                                            <span th:text="${entry.key.book.title}"></span>
+                                        </a>
+                                    </p>
+                                </div>
+                                <hr>
+                                <div class="row text-end">
+                                    <div>
+                                        <p style="margin: -5px 0;">Цена: <span th:text="${entry.key.price}"></span> руб.</p>
                                     </div>
-                                    <hr>
-                                    <div class="row text-end">
-                                        <div>
-                                            <p style="margin: -5px 0;">Цена: <span th:text="${entry.key.price}"></span> руб.</p>
-                                        </div>
-                                        <div class="mt-2">
-                                            <span th:text="'Продавец - ' + ${entry.key.user.toString()} + '(' + ${entry.key.user.login} + ')'"></span>
-                                        </div>
+                                    <div class="mt-2">
+                                        <span th:text="'Продавец - ' + ${entry.key.user.toString()} + '(' + ${entry.key.user.login} + ')'"></span>
                                     </div>
-                                    <hr>
-                                    <div class="row">
-                                        <p class="d-flex justify-content-between align-items-center" style="margin: -5px 0;">
-                                        <div class="col-auto">
-                                            <form th:action="@{/profile/cart/delete_one}" method="post" class="quantity-form">
-                                                <input type="hidden" name="bookSaleId" th:value="${entry.key.id}" />
-                                                <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
-                                            </form>
-                                        </div>
-                                        <div class="col-auto">
-                                            <span th:text="${entry.value}" class="quantity-value"></span>
-                                        </div>
-                                        <div class="col-auto">
-                                            <form th:action="@{/profile/cart/add_one}" method="post" class="quantity-form">
-                                                <input type="hidden" name="bookSaleId" th:value="${entry.key.id}" />
-                                                <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
-                                            </form>
-                                        </div>
-                                        </p>
-                                    </div>
-                                    <div class="row text-end mt-6">
-                                        <form th:action="@{/profile/cart/delete}" method="post">
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <p class="d-flex justify-content-between align-items-center" style="margin: -5px 0;">
+                                    <div class="col-auto">
+                                        <form th:action="@{/profile/cart/delete_one}" method="post" class="quantity-form">
                                             <input type="hidden" name="bookSaleId" th:value="${entry.key.id}" />
-                                            <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
                                         </form>
                                     </div>
+                                    <div class="col-auto">
+                                        <span th:text="${entry.value}" class="quantity-value"></span>
+                                    </div>
+                                    <div class="col-auto">
+                                        <form th:action="@{/profile/cart/add_one}" method="post" class="quantity-form">
+                                            <input type="hidden" name="bookSaleId" th:value="${entry.key.id}" />
+                                            <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
+                                        </form>
+                                    </div>
+                                    </p>
+                                </div>
+                                <div class="row text-end mt-6">
+                                    <form th:action="@{/profile/cart/delete}" method="post">
+                                        <input type="hidden" name="bookSaleId" th:value="${entry.key.id}" />
+                                        <button class="btn btn-danger btn-sm" type="submit">Удалить</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </form>
+                </div>
             </div>
             <!-- Правый столбец: общая сумма и кнопка оформления -->
             <div class="cart-summary col-md-4">
                 <h4>Итог:</h4>
                 <p id="total-sum" th:text="'Общая сумма: ' + ${totalSum} + ' руб.'"></p>
                 <p id="selected-sum">Сумма выбранного: 0 руб.</p>
-                <button class="btn btn-primary" onclick="document.getElementById('checkoutForm').submit()">Оформить</button>
+                <form id="checkoutForm" th:action="@{/profile/cart/checkout}" method="post">
+                    <th:block th:each="entry : ${bookSaleCountMap}">
+                        <input type="hidden" class="hidden-cart-item-check" id="hidden-cart-item-${entry.key.id}"
+                               name="selectedItems" th:value="${entry.key.id}">
+                    </th:block>
+                    <button class="btn btn-primary" type="submit">Оформить</button>
+                </form>
             </div>
         </div>
     </div>
@@ -126,6 +130,11 @@
         calculateSelectedSum();
         calculateTotalSum();
     });
+
+    function syncHiddenCheckbox(originalCheckbox) {
+        const hiddenCheckbox = document.getElementById('hidden-cart-item-' + originalCheckbox.value);
+        hiddenCheckbox.checked = originalCheckbox.checked;
+    }
 </script>
 </body>
 </html>
