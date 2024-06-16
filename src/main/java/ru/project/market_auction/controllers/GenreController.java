@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.project.market_auction.models.books.Genre;
 import ru.project.market_auction.repositories.GenreRepository;
 
@@ -23,9 +24,10 @@ public class GenreController {
     }
 
     @GetMapping("/{id}")
-    public String getGenre(Model model, @PathVariable("id") Long id){
+    public String getGenre(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Genre> genre = genreRepository.findById(id);
         if(genre.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Запись не была найдена");
             return "redirect:/genres/main";
         }
         model.addAttribute("genre", genre.get());
@@ -45,9 +47,10 @@ public class GenreController {
     }
 
     @GetMapping("/update/{id}")
-    public String editGenre(Model model, @PathVariable("id") Long id){
+    public String editGenre(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Genre> genre = genreRepository.findById(id);
         if(genre.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "При изменении записи произошла ошибка");
             return "redirect:/genres/main";
         }
         model.addAttribute("genre", genre.get());
@@ -61,9 +64,10 @@ public class GenreController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delGenre(Model model, @PathVariable("id") Long id){
+    public String delGenre(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Genre> genre = genreRepository.findById(id);
         if(genre.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Не найдена запись для удаления");
             return "redirect:/genres/main";
         }
         model.addAttribute("genre", genre.get());

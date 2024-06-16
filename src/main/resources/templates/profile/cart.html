@@ -22,9 +22,9 @@
                         <div class="col-auto d-flex align-items-center">
                             <div class="form-check" style="margin: -10px 10px 0 10px;">
                                 <input class="form-check-input cart-item-check" type="checkbox"
-                                       th:value="${entry.key.id}"
+                                       name="cartItems" th:value="${entry.key.id}"
                                        th:data-price="${entry.key.price}" th:data-quantity="${entry.value}"
-                                       onchange="calculateSelectedSum(); syncHiddenCheckbox(this);">
+                                       onchange="calculateSelectedSum()">
                             </div>
                             <a th:href="@{/books/{id}(id=${entry.key.book.id})}" style="margin: 3px 0;">
                                 <img class="img-fluid card-img mx-auto" style="width: 140px; height: 215px; object-fit: cover;"
@@ -86,11 +86,7 @@
                 <p id="total-sum" th:text="'Общая сумма: ' + ${totalSum} + ' руб.'"></p>
                 <p id="selected-sum">Сумма выбранного: 0 руб.</p>
                 <form id="checkoutForm" th:action="@{/profile/cart/checkout}" method="post">
-                    <th:block th:each="entry : ${bookSaleCountMap}">
-                        <input type="hidden" class="hidden-cart-item-check" id="hidden-cart-item-${entry.key.id}"
-                               name="selectedItems" th:value="${entry.key.id}">
-                    </th:block>
-                    <button class="btn btn-primary" type="submit">Оформить</button>
+                    <button id="checkoutButton" class="btn btn-primary" type="submit" disabled>Оформить</button>
                 </form>
             </div>
         </div>
@@ -107,12 +103,32 @@
 <script>
     function calculateSelectedSum() {
         let selectedSum = 0;
+        let selectedCount = 0;
         document.querySelectorAll('.cart-item-check:checked').forEach(function (checkbox) {
             const price = parseFloat(checkbox.getAttribute('data-price'));
             const quantity = parseInt(checkbox.getAttribute('data-quantity'));
             selectedSum += price * quantity;
+            selectedCount++;
         });
         document.getElementById('selected-sum').innerText = 'Выбранная сумма: ' + selectedSum.toFixed(2) + ' руб.';
+        updateCheckoutForm(selectedCount);
+    }
+
+    function updateCheckoutForm(selectedCount) {
+        const checkoutForm = document.getElementById('checkoutForm');
+        const checkoutButton = document.getElementById('checkoutButton');
+        // Удаляем все ранее добавленные скрытые поля
+        checkoutForm.querySelectorAll('input[name="selectedItems"]').forEach(input => input.remove());
+        // Добавляем новые скрытые поля для каждого выбранного элемента
+        document.querySelectorAll('.cart-item-check:checked').forEach(function (checkbox) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'selectedItems';
+            input.value = checkbox.value;
+            checkoutForm.appendChild(input);
+        });
+        // Обновляем состояние кнопки "Оформить"
+        checkoutButton.disabled = selectedCount === 0;
     }
 
     function calculateTotalSum() {
@@ -130,11 +146,6 @@
         calculateSelectedSum();
         calculateTotalSum();
     });
-
-    function syncHiddenCheckbox(originalCheckbox) {
-        const hiddenCheckbox = document.getElementById('hidden-cart-item-' + originalCheckbox.value);
-        hiddenCheckbox.checked = originalCheckbox.checked;
-    }
 </script>
 </body>
 </html>

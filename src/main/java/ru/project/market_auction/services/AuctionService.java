@@ -26,7 +26,7 @@ public class AuctionService {
     public void checkLBAndEndAuctions() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         List<Auction> auctions = auctionRepository.findByAuctionTypeAndStatus("lb", false);
-        for (Auction auction : auctions) {
+        auctions.parallelStream().forEach(auction -> {
             AuctionBid lastBid = auctionBidRepository.findTopByAuctionOrderByBidTimeDesc(auction);
             if (lastBid != null) {
                 LocalDateTime lastBidTime = lastBid.getBidTime();
@@ -41,7 +41,7 @@ public class AuctionService {
                     auctionRepository.save(auction);
                 }
             }
-        }
+        });
     }
 
     @Transactional

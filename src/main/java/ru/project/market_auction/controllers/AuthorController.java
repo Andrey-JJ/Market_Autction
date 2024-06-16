@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.project.market_auction.models.books.Author;
 import ru.project.market_auction.repositories.AuthorRepository;
 
@@ -23,10 +24,12 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public String getAuthor(Model model, @PathVariable("id") Long id){
+    public String getAuthor(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Author> author = authorRepository.findById(id);
-        if(author.isEmpty())
+        if(author.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Запись не была найдена");
             return "redirect:/authors/main";
+        }
         model.addAttribute("author", author.get());
         return "author/detail";
     }
@@ -44,9 +47,10 @@ public class AuthorController {
     }
 
     @GetMapping("/update/{id}")
-    public String editAuthor(Model model, @PathVariable("id") Long id){
+    public String editAuthor(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Author> author = authorRepository.findById(id);
         if(author.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "При изменении записи произошла ошибка");
             return "redirect:/authors/main";
         }
         model.addAttribute("author", author.get());
@@ -60,9 +64,10 @@ public class AuthorController {
     }
 
     @GetMapping("/delete/{id}")
-    public String delAuthor(Model model, @PathVariable("id") Long id){
+    public String delAuthor(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Author> author = authorRepository.findById(id);
         if(author.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Не найдена запись для удаления");
             return "redirect:/authors/main";
         }
         model.addAttribute("author", author.get());
@@ -70,7 +75,7 @@ public class AuthorController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delAuthor(@PathVariable("id") Long id, Model model){
+    public String delAuthor(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes){
         Optional<Author> author = authorRepository.findById(id);
         if(author.isPresent()){
             authorRepository.deleteById(id);

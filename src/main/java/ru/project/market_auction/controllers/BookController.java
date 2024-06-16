@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import ru.project.market_auction.models.books.*;
 import ru.project.market_auction.repositories.*;
 
@@ -46,9 +47,10 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/{id}")
-    public String getBook(Model model, @PathVariable("id") Long id){
+    public String getBook(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Book> book = bookRepository.findById(id);
         if(book.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Запись не была найдена");
             return "redirect:/books/main";
         }
         model.addAttribute("book", book.get());
@@ -112,7 +114,7 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/update/{id}")
-    public String updateBook(@PathVariable("id") Long id, Model model){
+    public String updateBook(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes){
         Optional<Book> book = bookRepository.findById(id);
 
         if (book.isEmpty()) {
@@ -177,9 +179,10 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
-    public String delBook(Model model, @PathVariable("id") Long id){
+    public String delBook(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Book> book = bookRepository.findById(id);
         if(book.isEmpty()){
+            redirectAttributes.addFlashAttribute("error", "Не найдена запись для удаления");
             return "redirect:/books/main";
         }
         model.addAttribute("book", book.get());
@@ -188,7 +191,7 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/delete/{id}")
-    public String delBook(@PathVariable("id") Long id){
+    public String delBook(@PathVariable("id") Long id, RedirectAttributes redirectAttributes){
         Optional<Book> book = bookRepository.findById(id);
         if(book.isPresent()){
             bookRepository.deleteById(id);
