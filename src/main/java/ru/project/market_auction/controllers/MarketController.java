@@ -77,6 +77,20 @@ public class MarketController {
         return "redirect:/books/" + bookSale.getBook().getId();
     }
 
+    @GetMapping("/update/{id}")
+    public String editSale(Model model, @PathVariable("id") Long id){
+        Optional<BookSale> bookSale = marketRepository.findById(id);
+        model.addAttribute("bookSale", bookSale);
+        return "market/add";
+    }
+
+    //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+    @PostMapping("/update")
+    public String editSale(Model model, @ModelAttribute BookSale bookSale){
+        marketRepository.save(bookSale);
+        return "redirect:/books/" + bookSale.getBook().getId();
+    }
+
     //@PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
     @GetMapping("/delete/{id}")
     public String delBookSale(Model model, @PathVariable("id") String id){

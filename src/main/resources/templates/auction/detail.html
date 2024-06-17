@@ -110,40 +110,42 @@
                 </div>
             </div>
             <!-- Блок детализации -->
-            <div th:each="detail : ${auction.auctionDetails}" class="card mb-3 mt-4">
-                <div class="row g-0">
-                    <div class="col-auto d-flex align-items-center">
-                        <a th:href="@{/books/{id}(id=${detail.book.id})}" style="margin: 5px 0 5px 5px;">
-                            <img class="img-fluid card-img mx-auto" style="width: 165px; height: 240px; object-fit: cover;"
-                                 th:src="@{/images/books/{imagePath}(imagePath=${detail.book.image})}" alt="Book Image">
-                        </a>
-                    </div>
-                    <div class="col">
-                        <div class="card-body">
-                            <div class="row">
-                                <a th:href="@{/books/{id}(id=${detail.book.id})}">
-                                    <h4><span th:text="${detail.book.title}"></span></h4>
-                                </a>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col">
-                                    <h5>Описание:</h5>
-                                    <h6>Издатель: <a th:text="${detail.book.publisher.name}"> | <span th:text="${detail.book.publicationYear}"></span></a></h6>
-                                    <h6>Авторы:
-                                        <span th:each="authors, iterStat : ${detail.book.authors}">
+            <div class="scrollable-list mt-4" style="height: 600px;">
+                <div th:each="detail : ${auction.auctionDetails}" class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-auto d-flex align-items-center">
+                            <a th:href="@{/books/{id}(id=${detail.book.id})}" style="margin: 5px 0 5px 5px;">
+                                <img class="img-fluid card-img mx-auto" style="width: 165px; height: 240px; object-fit: cover;"
+                                     th:src="@{/images/books/{imagePath}(imagePath=${detail.book.image})}" alt="Book Image">
+                            </a>
+                        </div>
+                        <div class="col">
+                            <div class="card-body">
+                                <div class="row">
+                                    <a th:href="@{/books/{id}(id=${detail.book.id})}">
+                                        <h4><span th:text="${detail.book.title}"></span></h4>
+                                    </a>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col">
+                                        <h5>Описание:</h5>
+                                        <h6>Издатель: <a th:text="${detail.book.publisher.name}"> | <span th:text="${detail.book.publicationYear}"></span></a></h6>
+                                        <h6>Авторы:
+                                            <span th:each="authors, iterStat : ${detail.book.authors}">
                                             <a th:href="@{/authors/{id}(id=${authors.author.id})}" th:text="${authors.author.toString()}"></a>
                                             <span th:if="${not iterStat.last}">, </span>
                                         </span>
-                                    </h6>
-                                    <h6>Категория: <a th:text="${detail.book.genre.name}"></a></h6>
-                                    <h6 th:text="'Кол-во страниц: ' + ${detail.book.pageCount}"></h6>
-                                </div>
-                                <div class="col-auto d-flex flex-column justify-content-end">
-                                    <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')') or auction.user.login == #authentication.name}">
-                                        <!-- Кнопка "Удалить" -->
-                                        <a th:if="${!auction.status}" th:href="@{/auctions/delete_detail/{id}(id=${detail.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</a>
-                                    </th:block>
+                                        </h6>
+                                        <h6>Категория: <a th:text="${detail.book.genre.name}"></a></h6>
+                                        <h6 th:text="'Кол-во страниц: ' + ${detail.book.pageCount}"></h6>
+                                    </div>
+                                    <div class="col-auto d-flex flex-column justify-content-end">
+                                        <th:block th:if="${#authorization.expression('hasRole(''ADMIN'')') or auction.user.login == #authentication.name}">
+                                            <!-- Кнопка "Удалить" -->
+                                            <a th:if="${!auction.status}" th:href="@{/auctions/delete_detail/{id}(id=${detail.id})}" class="btn btn-danger" style="width: 99.7px;">Удалить</a>
+                                        </th:block>
+                                    </div>
                                 </div>
                             </div>
                         </div>

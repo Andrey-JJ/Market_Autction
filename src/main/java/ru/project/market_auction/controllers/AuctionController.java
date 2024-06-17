@@ -126,15 +126,31 @@ public class AuctionController {
     }
 
     @PostMapping("/update")
-    public String editAuction(@ModelAttribute Auction auction, Principal principal){
-        if(auction.getAuctionBids().isEmpty()){
-            auction.setCurrentPrice(auction.getMinimumPrice());
+    public String editAuction(@ModelAttribute Auction auction) {
+        Optional<Auction> existingAuctionOpt = auctionRepository.findById(auction.getId());
+
+        if (existingAuctionOpt.isPresent()) {
+            Auction existingAuction = existingAuctionOpt.get();
+            if (existingAuction.getAuctionBids().isEmpty()) {
+                // Если нет ставок, позволяем изменить минимальную цену и текущая цена равна минимальной цене
+                auction.setCurrentPrice(auction.getMinimumPrice());
+            } else {
+                // Если есть ставки, не позволяем изменить минимальную цену и длительность
+                auction.setMinimumPrice(existingAuction.getMinimumPrice());
+                auction.setCurrentPrice(existingAuction.getCurrentPrice());
+                if ("lt".equals(existingAuction.getAuctionType())) {
+                    auction.setAuctionDuration(existingAuction.getAuctionDuration());
+                }
+            }
+            auction.setUser(existingAuction.getUser()); // Сохраняем владельца аукциона
+            auction.setAuctionType(existingAuction.getAuctionType()); // Сохраняем тип аукциона
+            auction.setBegTime(existingAuction.getBegTime()); // Сохраняем время начала
+            auction.setEndTime(existingAuction.getEndTime()); // Сохраняем время окончания
+            auction.setStatus(existingAuction.getStatus()); // Сохраняем статус
+
+            auctionRepository.save(auction);
         }
-        else{
-            Optional<Auction> oldAuction = auctionRepository.findById(auction.getId());
-            auction.setMinimumPrice(oldAuction.get().getMinimumPrice());
-        }
-        auctionRepository.save(auction);
+
         return "redirect:/auctions/" + auction.getId();
     }
 
